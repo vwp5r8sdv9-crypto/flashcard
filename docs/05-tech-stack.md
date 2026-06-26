@@ -34,7 +34,7 @@ Every entry below is a decision, not a default — the "Why" line ties it back t
 
 | Tool | Role | Why |
 |---|---|---|
-| **Vercel or Netlify** (either is fine; pick at setup time) | Frontend hosting | Git-integrated deploys, automatic preview deployments per pull request, generous free tier for a static/PWA frontend. No server to manage since there's no custom backend. |
+| **Vercel** | Frontend hosting | Git-integrated deploys, automatic preview deployments per pull request, generous free tier for a static/PWA frontend, zero-config for a Vite SPA. No server to manage since there's no custom backend. Netlify would serve equally well and isn't a wrong choice — Vercel is picked here simply so it's a settled decision rather than an open question when CI/CD is wired up in Phase 0 ([Roadmap](13-roadmap.md)); switching later, if ever needed, is a low-cost change since hosting isn't referenced by any application code. |
 | **Supabase Cloud** | Backend hosting | The managed Postgres/Auth/Storage/Functions instance — see above. |
 
 ## Quality tooling

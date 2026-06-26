@@ -30,8 +30,8 @@ These walk through the core journeys end to end, grounded in the [MVP Scope](03-
 
 ## 4. Study session
 
-1. From "your decks," each deck shows a due-card count. User taps "study" on a deck (or a global "study all due cards" entry point spanning decks).
-2. The app loads the queue: cards where `due_at <= now()` for that deck (or across decks), via the `study` feature's repository call.
+1. From "your decks," each deck shows a due-card count, and a global "study all due cards" entry point sits alongside the deck list itself (a single combined queue across every deck — both are in MVP scope, see [MVP Scope](03-mvp-scope.md) §Studying). User taps either "study" on a specific deck, or the global entry point.
+2. The app loads the queue: cards where `due_at <= now()` for that deck, or — for the global entry point — for the signed-in user with no deck filter at all. Both are the same repository call with an optional `deckId` parameter; see [Database Design](07-database-design.md) §`card_review_state` for the index that keeps this fast either way.
 3. **Empty due state:** "nothing due right now" with the next due time shown, if there are cards but none are due yet; a distinct "add some cards first" state if the deck has zero cards.
 4. For each card in the queue:
    - Front is shown.
@@ -54,8 +54,8 @@ These walk through the core journeys end to end, grounded in the [MVP Scope](03-
 ## 7. Import a deck
 
 1. From "your decks," "import" → choose a file (JSON or CSV).
-2. App parses and validates the file client-side (or via an Edge Function for larger files — see [API Design](09-api-design.md)) and shows a **preview**: deck name, card count, a sample of cards.
-3. User confirms → cards are created (new cards start in `new` state; a full-fidelity JSON import that includes prior scheduling state restores it instead).
+2. The app parses the file **client-side** and shows a **preview** (deck name, card count, a sample of cards) immediately — no network round trip needed just to preview. This uses the same validation schema as the authoritative check in step 3 (see [API Design](09-api-design.md) §The repository pattern is the API), so a file that passes preview is never surprised by a different rule later.
+3. User confirms → the file is sent to the `import-deck` Edge Function, which re-validates and performs the insert as a single transaction (new cards start in `new` state; a full-fidelity JSON import that includes prior scheduling state restores it instead). This step is **always** server-side, regardless of file size — see [API Design](09-api-design.md) for why client-side parsing alone is never trusted for the actual write.
 4. Errors (malformed file, unsupported format) are shown before anything is committed — nothing is partially imported.
 
 ## 8. Multi-device continuity

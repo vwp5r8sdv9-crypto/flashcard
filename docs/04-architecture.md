@@ -38,14 +38,16 @@ There is **no custom backend server** for the MVP. The frontend talks to Supabas
 The frontend is organized into four layers with a strict dependency direction (each layer may only depend on the ones below it):
 
 ```
-UI layer            (pages/routes, components)
+UI layer              (pages/routes, components)
         ↓ uses
-Feature layer        (feature-specific hooks, composition)
-        ↓ uses
-Domain layer          (pure business logic — no React, no Supabase)
-        ↓ used by
-Data-access layer     (repositories — the only code that imports supabase-js)
+Feature layer         (feature-specific hooks, composition)
+        ↓ uses                      ↓ uses
+Domain layer                Data-access layer
+(pure business logic —      (repositories — the only
+ no React, no Supabase)      code that imports supabase-js)
 ```
+
+Domain and data-access are **siblings**, not a chain — neither depends on the other. A feature hook (e.g. `useSubmitReview`) calls *both*: the domain layer to compute the new schedule, and the data-access layer to persist it. Domain code never imports Supabase, and the data-access layer never imports domain logic — keeping the pure scheduling math fully decoupled from how (or whether) it's ever persisted.
 
 ### UI layer
 Pages, routes, and components. Renders state, captures user input, calls feature hooks. Contains no business rules and no direct data-fetching calls.

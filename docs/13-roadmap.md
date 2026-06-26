@@ -20,7 +20,7 @@ Built one module at a time, per the agreed process: each phase is reviewed befor
 - Decks: create/edit/delete/list ([User Flows](08-user-flows.md) §2, §5).
 - Cards: create/edit/delete within a deck ([User Flows](08-user-flows.md) §3).
 - `domain/srs`: the spaced-repetition algorithm, built and unit-tested as a pure module ([Architecture](04-architecture.md)).
-- Study session: due-card queue, Again/Good/Easy, session summary ([User Flows](08-user-flows.md) §4).
+- Study session: due-card queue (per-deck and the global cross-deck view — both share one query, see [Database Design](07-database-design.md) §Row Level Security), Again/Good/Easy, session summary ([User Flows](08-user-flows.md) §4).
 
 **Exit criteria:** [MVP Scope](03-mvp-scope.md)'s "definition of done" items 1–4 are met.
 

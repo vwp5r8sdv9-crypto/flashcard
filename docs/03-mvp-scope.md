@@ -18,7 +18,7 @@ The MVP exists to prove the core loop from [Goals](02-goals.md): create a deck, 
 - Deleting a deck deletes its cards (cascade).
 
 ### Studying
-- A "study session" pulls all due cards for a deck (or across all decks — see [User Flows](08-user-flows.md)).
+- Two entry points, both in scope: study a **single deck**'s due cards, and study **all due cards across every deck** in one combined queue (see [User Flows](08-user-flows.md)). These share the same query shape with or without a `deck_id` filter (see [Database Design](07-database-design.md) §Row Level Security), so the marginal cost of offering both is low while the UX value — clearing everything due in one sitting instead of entering each deck separately — is high for anyone running more than one deck.
 - Each card: show front → reveal back → rate **Again / Good / Easy**.
 - Ratings drive a spaced-repetition scheduling algorithm (SM-2-family). The exact tuning is an implementation detail of the study module, built when we reach that phase — the schema is designed to support it now (see [Database Design](07-database-design.md) §`card_review_state`).
 - A short session summary (cards studied, breakdown by rating) at the end.

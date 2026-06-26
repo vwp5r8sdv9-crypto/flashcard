@@ -20,6 +20,10 @@ Read in order — each document builds on the assumptions of the previous one:
 12. [Coding Standards](12-coding-standards.md)
 13. [Roadmap](13-roadmap.md)
 
+## Decision log
+
+Every major architectural decision — what was chosen, what else was considered, and why — is recorded as an Architecture Decision Record in [adr/](adr/README.md). The numbered documents above describe the system as it currently stands; the ADR log is the historical trail of *why* it stands that way. Start at [adr/README.md](adr/README.md) for the index and the conventions used.
+
 ## Foundational decisions locked in for this version
 
 These were decided up front because they shape every other document. They can be revisited later, but changing them after the foundation is built is expensive — so they're called out explicitly here:

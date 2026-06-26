@@ -45,7 +45,8 @@ flashcards/
 │   │       └── types.ts
 │   │
 │   ├── domain/                    # pure business logic — no React, no Supabase imports
-│   │   └── srs/                   # spaced-repetition scheduling algorithm + its unit tests
+│   │   ├── srs/                   # spaced-repetition scheduling algorithm + its unit tests
+│   │   └── importExport/          # Zod schema for valid import files — shared with the import-deck Edge Function, see docs/09-api-design.md
 │   │
 │   ├── components/                 # shared, generic, feature-agnostic UI (Button, Dialog, Input...)
 │   ├── lib/                        # infrastructure: supabaseClient.ts, queryClient.ts, env.ts
