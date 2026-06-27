@@ -26,4 +26,4 @@ npm run dev
 
 ## Status
 
-Foundation/scaffolding stage — see [`docs/13-roadmap.md`](docs/13-roadmap.md) for what's built vs. planned. No business features (decks, cards, study, auth UI) are implemented yet.
+Early build — see [`docs/13-roadmap.md`](docs/13-roadmap.md) for what's built vs. planned. Deck management (create/edit/delete/view) works end to end against local storage; sign-in is simulated; cards, studying, and real Supabase/auth integration are not implemented yet.

@@ -1,12 +1,25 @@
 import { forwardRef, type ButtonHTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
 
-export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement>>(
-  ({ className, ...props }, ref) => (
+type ButtonVariant = 'primary' | 'secondary' | 'destructive'
+
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: ButtonVariant
+}
+
+const variantClasses: Record<ButtonVariant, string> = {
+  primary: 'bg-primary text-primary-foreground hover:opacity-90',
+  secondary: 'bg-muted text-foreground hover:bg-border',
+  destructive: 'bg-destructive text-destructive-foreground hover:opacity-90',
+}
+
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant = 'primary', ...props }, ref) => (
     <button
       ref={ref}
       className={cn(
-        'inline-flex h-10 w-full items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90 disabled:pointer-events-none disabled:opacity-50',
+        'inline-flex h-10 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50',
+        variantClasses[variant],
         className,
       )}
       {...props}

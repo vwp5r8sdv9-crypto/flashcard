@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { RootLayout } from './RootLayout'
 import { HomePage } from './HomePage'
+import { DeckDetailPage } from './DeckDetailPage'
 import { LoginPage } from './LoginPage'
 import { SignUpPage } from './SignUpPage'
 import { NotFoundPage } from './NotFoundPage'
@@ -16,6 +17,7 @@ export const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       { index: true, element: <HomePage /> },
+      { path: 'decks/:deckId', element: <DeckDetailPage /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'signup', element: <SignUpPage /> },
       { path: '*', element: <NotFoundPage /> },

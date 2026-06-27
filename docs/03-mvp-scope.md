@@ -11,8 +11,8 @@ The MVP exists to prove the core loop from [Goals](02-goals.md): create a deck, 
 
 ### Decks
 
-- Create, rename/edit (name, description, optional language tag), delete a deck.
-- List all of a user's decks with a due-card count per deck.
+- Create, rename/edit (name, optional language tag, color for visual identification), delete a deck — with a confirmation step before delete.
+- List all of a user's decks as responsive cards; clicking one opens its detail page. A due-card count per deck is added once studying exists (see [Roadmap](13-roadmap.md) Phase 1).
 
 ### Flashcards
 

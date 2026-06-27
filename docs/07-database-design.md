@@ -52,6 +52,7 @@ Populated automatically by a Postgres trigger on `auth.users` insert (standard S
 | `name`        | `text`, not null                            |                                                                                                                                                      |
 | `description` | `text`, nullable                            |                                                                                                                                                      |
 | `language`    | `text`, nullable                            | Free-text tag (e.g. "Russian") — not an enum, since users study arbitrary subjects, not just languages (see [Product Vision](01-product-vision.md)). |
+| `color`       | `text`, not null, default `'#3b82f6'`       | Hex color for visual identification in the deck grid — added when deck management was built; see [User Flows](08-user-flows.md) §2.                  |
 | `created_at`  | `timestamptz`, default `now()`              |                                                                                                                                                      |
 | `updated_at`  | `timestamptz`, default `now()`              | Updated via trigger on row update.                                                                                                                   |
 

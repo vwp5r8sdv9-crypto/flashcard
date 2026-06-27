@@ -2,22 +2,24 @@
 
 Built one module at a time, per the agreed process: each phase is reviewed before moving to the next. Phases are sequenced by what the core loop in [Product Vision](01-product-vision.md) needs first.
 
+**Sequencing note:** real authentication and Supabase wiring were deliberately reordered after Login/Home UI to come _after_ core deck management, not before — to get the product's central interaction (decks) reviewable sooner. Login/Home are built with simulated sign-in (no real session), and decks run against a localStorage repository instead of Supabase for now (ADR-0015). Both are designed to slot in the real backend without a UI rewrite — see ADR-0004 and ADR-0015.
+
 ## Phase 0 — Foundation (current phase)
 
 **Goal:** Agree on the architecture before writing application code.
 
 - This documentation set (`/docs`).
 - Repo scaffolding: Vite + React + TypeScript project, ESLint/Prettier, Vitest, Playwright, CI pipeline (see [Tech Stack](05-tech-stack.md)).
-- Supabase project setup: initial migration for `profiles`/`decks`/`cards`/`card_review_state`/`review_logs` with RLS policies (see [Database Design](07-database-design.md)).
-- Base auth wiring (sign up/in/out) — enough to confirm the auth + RLS model works end to end, before building deck/card features on top of it.
+- Supabase project setup: initial migration for `profiles`/`decks`/`cards`/`card_review_state`/`review_logs` with RLS policies (see [Database Design](07-database-design.md)) — **not yet done**; deferred until real auth is wired (see sequencing note above).
+- Base auth wiring (sign up/in/out) — **deferred**; Login/Home currently simulate sign-in only.
 
-**Exit criteria:** A signed-up user lands on an empty, authenticated "your decks" screen, backed by real RLS-protected tables.
+**Exit criteria (revised):** A user lands on a "your decks" screen and can manage decks end to end against local persistence. Real auth + RLS-backed tables become the exit criteria for this phase once that work resumes.
 
 ## Phase 1 — Core loop: decks, cards, studying
 
 **Goal:** Prove the product's central promise.
 
-- Decks: create/edit/delete/list ([User Flows](08-user-flows.md) §2, §5).
+- Decks: create/edit/delete/list — **done**, against the localStorage repository in ADR-0015 ([User Flows](08-user-flows.md) §2, §5).
 - Cards: create/edit/delete within a deck ([User Flows](08-user-flows.md) §3).
 - `domain/srs`: the spaced-repetition algorithm, built and unit-tested as a pure module ([Architecture](04-architecture.md)).
 - Study session: due-card queue (per-deck and the global cross-deck view — both share one query, see [Database Design](07-database-design.md) §Row Level Security), Again/Good/Easy, session summary ([User Flows](08-user-flows.md) §4).

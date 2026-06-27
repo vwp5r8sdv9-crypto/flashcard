@@ -41,5 +41,6 @@ If an ADR and a living `/docs` page ever disagree about what's currently true, *
 | [0012](0012-import-export-strategy.md)                               | Import/Export Strategy: Client Preview, Server-Authoritative Commit      | Accepted |
 | [0013](0013-spaced-repetition-algorithm.md)                          | Spaced Repetition Algorithm: Simplified SM-2 Family, Three-Button Rating | Accepted |
 | [0014](0014-feature-based-folder-structure.md)                       | Code Organization: Feature-Based Folder Structure                        | Accepted |
+| [0015](0015-interim-localstorage-persistence.md)                     | Interim Persistence: localStorage Repository Before Supabase Integration | Accepted |
 
-All fourteen were accepted together on 2026-06-27, as part of writing the project's foundation before any application code existed (see `/docs/13-roadmap.md` Phase 0). Future decisions — including any reversal of one of these — get their own new ADR, numbered `0015` onward.
+ADRs 0001–0014 were accepted together on 2026-06-27, as part of writing the project's foundation before any application code existed (see `/docs/13-roadmap.md` Phase 0). Future decisions — including any reversal of one of these — get their own new ADR, numbered `0016` onward.
