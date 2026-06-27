@@ -8,7 +8,7 @@ The full product and architecture documentation — including the reasoning behi
 
 ```bash
 npm install
-cp .env.example .env   # fill in your Supabase project's URL and anon key
+cp .env.example .env.local   # fill in your Supabase project's URL and anon key
 npm run dev
 ```
 

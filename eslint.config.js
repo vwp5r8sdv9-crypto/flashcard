@@ -25,6 +25,16 @@ export default tseslint.config(
         tsconfigRootDir: import.meta.dirname,
       },
     },
+    rules: {
+      // react-hook-form's handleSubmit() returns a Promise-returning handler,
+      // which is the normal, correct shape for a JSX event-handler attribute
+      // (React fires it without awaiting). Only catch this for non-attribute
+      // call sites, where a swallowed promise is usually a real bug.
+      '@typescript-eslint/no-misused-promises': [
+        'error',
+        { checksVoidReturn: { attributes: false } },
+      ],
+    },
   },
 
   // Architectural rule (docs/12-coding-standards.md, ADR-0004): domain code
