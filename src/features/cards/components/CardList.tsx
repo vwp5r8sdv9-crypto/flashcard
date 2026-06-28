@@ -73,7 +73,7 @@ export function CardList({ deckId, language }: CardListProps) {
       </div>
 
       {isLoading && (
-        <div className="flex flex-col divide-y divide-border rounded-lg border border-border">
+        <div className="flex flex-col divide-y divide-border rounded-[28px] border border-border">
           {[0, 1, 2].map((key) => (
             <div key={key} className="flex items-center gap-4 px-3 py-3">
               <div className="min-w-0 flex-1 space-y-2">
@@ -94,7 +94,7 @@ export function CardList({ deckId, language }: CardListProps) {
       )}
 
       {visibleCards.length > 0 && (
-        <div className="flex flex-col divide-y divide-border rounded-lg border border-border">
+        <div className="flex flex-col divide-y divide-border rounded-[28px] border border-border">
           {visibleCards.map((card) => (
             <CardListItem
               key={card.id}

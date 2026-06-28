@@ -23,7 +23,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? errorId : undefined}
           className={cn(
-            'h-10 rounded-md border border-border bg-card px-3 text-base outline-none focus:ring-2 focus:ring-primary',
+            'h-11 rounded-2xl border border-border bg-card-soft px-4 text-base outline-none focus:ring-2 focus:ring-primary',
             error && 'border-destructive',
             className,
           )}

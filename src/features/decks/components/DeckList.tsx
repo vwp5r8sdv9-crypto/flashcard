@@ -32,8 +32,8 @@ export function DeckList() {
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold">{t('decks.title')}</h1>
+      <div className="mb-8 flex items-center justify-between gap-3">
+        <h1 className="text-display-1">{t('decks.title')}</h1>
         <div className="flex items-center gap-3">
           {Boolean(dueCount) && (
             <Link to="/study" className="text-sm text-primary underline">

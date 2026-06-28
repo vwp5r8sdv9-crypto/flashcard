@@ -11,8 +11,8 @@ interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 
 }
 
 const variantClasses: Record<IconButtonVariant, string> = {
-  default: 'hover:bg-border hover:text-foreground',
-  destructive: 'hover:bg-border hover:text-destructive',
+  default: 'hover:bg-soft hover:text-foreground',
+  destructive: 'hover:bg-soft hover:text-destructive',
 }
 
 /** A small icon-only button with a ~36px hit area and a visible focus ring — used for inline row actions like edit/delete. */
@@ -23,7 +23,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
       type="button"
       aria-label={label}
       className={cn(
-        'inline-flex min-h-9 min-w-9 items-center justify-center rounded-md transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+        'inline-flex min-h-9 min-w-9 items-center justify-center rounded-xl transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
         variantClasses[variant],
         className,
       )}

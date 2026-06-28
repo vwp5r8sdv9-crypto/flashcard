@@ -61,7 +61,7 @@ export function DeckDetailPage() {
             style={{ backgroundColor: deck.color }}
             aria-hidden
           />
-          <h1 className="min-w-0 break-words text-2xl font-semibold [overflow-wrap:anywhere]">
+          <h1 className="text-display-1 min-w-0 break-words [overflow-wrap:anywhere]">
             {deck.name}
           </h1>
         </div>

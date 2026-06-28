@@ -107,7 +107,8 @@
     "cardCount_one": "{{count}} card",
     "cardCount_other": "{{count}} cards",
     "lastStudied": "Last studied",
-    "backToDecks": "Your decks"
+    "backToDecks": "Your decks",
+    "manageCards": "Manage cards"
   },
   "cards": {
     "title": "Cards",
@@ -138,6 +139,7 @@
     "nothingDue": "Nothing due right now.",
     "nextDueAt": "Next card due {{date}}.",
     "noCardsYet": "Add some cards first — there's nothing here to study yet.",
+    "addFirstCard": "Add first card",
     "backToDecks": "Back to your decks",
     "sessionComplete": "Session complete!",
     "cardsStudied_one": "{{count}} card studied",

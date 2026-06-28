@@ -18,7 +18,7 @@ export function SidebarNavLinks({ onNavigate }: SidebarNavLinksProps) {
         <NavLink
           key={to}
           to={to}
-          end={to === '/'}
+          end={to === '/home'}
           onClick={onNavigate}
           className={({ isActive }) =>
             cn(

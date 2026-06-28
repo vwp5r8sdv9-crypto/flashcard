@@ -22,8 +22,8 @@ export function DeckColorPicker({ value, onChange }: DeckColorPickerProps) {
             aria-pressed={value === color}
             onClick={() => onChange(color)}
             className={cn(
-              'h-8 w-8 rounded-full transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-              value === color && 'ring-2 ring-primary ring-offset-2 ring-offset-background',
+              'h-9 w-9 rounded-full transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+              value === color && 'ring-2 ring-foreground/20 ring-offset-2 ring-offset-background',
             )}
             style={{ backgroundColor: color }}
           />

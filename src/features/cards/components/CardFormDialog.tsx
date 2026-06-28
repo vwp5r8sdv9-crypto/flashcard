@@ -111,7 +111,7 @@ export function CardFormDialog({
       onOpenChange={onOpenChange}
       title={isEditing ? t('cards.editCard') : t('cards.newCard')}
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" noValidate>
         <div className="flex items-end gap-2">
           <div className="flex-1">
             <TextField

@@ -107,7 +107,8 @@
     "cardCount_one": "{{count}} Karte",
     "cardCount_other": "{{count}} Karten",
     "lastStudied": "Zuletzt gelernt",
-    "backToDecks": "Deine Decks"
+    "backToDecks": "Deine Decks",
+    "manageCards": "Karten verwalten"
   },
   "cards": {
     "title": "Karten",
@@ -138,6 +139,7 @@
     "nothingDue": "Aktuell nichts fällig.",
     "nextDueAt": "Nächste Karte fällig {{date}}.",
     "noCardsYet": "Fügen Sie zuerst Karten hinzu — hier gibt es noch nichts zu lernen.",
+    "addFirstCard": "Erste Karte hinzufügen",
     "backToDecks": "Zurück zu deinen Decks",
     "sessionComplete": "Lerneinheit abgeschlossen!",
     "cardsStudied_one": "{{count}} Karte gelernt",

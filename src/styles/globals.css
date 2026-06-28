@@ -9,9 +9,11 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
+  --color-card-soft: var(--card-soft);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
+  --color-soft: var(--soft);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-destructive: var(--destructive);
@@ -19,14 +21,25 @@
   --color-success: var(--success);
   --color-success-foreground: var(--success-foreground);
 
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Roboto,
+    sans-serif;
+
+  /* Calmer, slightly larger defaults than Tailwind's stock scale — used
+     throughout for "muted metadata" (text-sm/text-xs) and primary body
+     copy/input text (text-base). The big display sizes for headings and
+     the flashcard front/back live in .text-display-1/2 below instead of
+     here, since they need paired font-weight/line-height, not just size. */
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.0625rem;
 
   /* Single-layer, warm-tinted shadows (see --shadow below) replace Tailwind's
      default neutral-black shadow recipe, applied automatically everywhere
      shadow-sm/md/lg are already used (Card, Dialog, DeckCard hover). */
   --shadow-sm: 0 2px 8px var(--shadow);
   --shadow-md: 0 8px 24px var(--shadow);
-  --shadow-lg: 0 16px 36px var(--shadow);
+  --shadow-lg: 0 10px 26px var(--shadow);
 
   --animate-fade-in: fade-in 200ms ease-out;
   --animate-fade-out: fade-out 150ms ease-in;
@@ -47,17 +60,20 @@
   }
 }
 
+/* Animates the standalone `scale` property (not `transform`), so it composes
+   cleanly with Dialog's own translate-based centering at any breakpoint
+   without the keyframe needing to know which translate value is active. */
 @keyframes dialog-in {
   from {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.96);
+    scale: 0.96;
   }
 }
 
 @keyframes dialog-out {
   to {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.96);
+    scale: 0.96;
   }
 }
 
@@ -68,6 +84,25 @@
 }
 
 /*
+ * Big calm headings — kept as plain CSS rather than Tailwind theme font-size
+ * pairs, since the exact size/weight/line-height/tracking combination only
+ * applies to a handful of spots (page h1s, the flashcard front/back).
+ */
+.text-display-1 {
+  font-size: 35px;
+  font-weight: 780;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.text-display-2 {
+  font-size: 36px;
+  font-weight: 750;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+/*
  * Warm beige/cream palette. --primary/--primary-foreground deliberately
  * reuse --foreground/--background (a monochrome dark-pill button, not a
  * separate accent hue) to match the calm, low-chrome look. --destructive
@@ -75,37 +110,48 @@
  * tone for contrast) and a button background (paired with
  * --destructive-foreground for the text on top of it) — verified both
  * pairings hold up at a readable contrast ratio in each mode.
+ *
+ * --border is intentionally translucent (alpha over whatever surface it
+ * sits on) rather than a flat hex, so dividing lines read as soft rather
+ * than as hard dashboard rules. --soft is the solid counterpart, used for
+ * tactile hover/press surfaces where a translucent color would feel too
+ * washed out to register as feedback. --card-soft is a slightly recessed
+ * surface (e.g. input wells) one step below --card.
  */
 :root {
   --background: #f7f2ea;
   --foreground: #171411;
   --card: #ffffff;
+  --card-soft: #fbf7f0;
   --muted: #f0e8dd;
   --muted-foreground: #786f66;
-  --border: #eadfce;
+  --border: rgba(35, 25, 12, 0.1);
+  --soft: #eadfce;
   --primary: var(--foreground);
   --primary-foreground: var(--background);
   --destructive: #8c2d2d;
   --destructive-foreground: #f1dada;
   --success: #047857;
   --success-foreground: #ffffff;
-  --shadow: rgba(35, 25, 12, 0.09);
+  --shadow: rgba(35, 25, 12, 0.08);
 }
 
 :root.dark {
-  --background: #14110f;
-  --foreground: #f7efe4;
-  --card: #211c18;
-  --muted: #2a231e;
+  --background: #15110f;
+  --foreground: #f4eadf;
+  --card: #231d18;
+  --card-soft: #2b241f;
+  --muted: #2d251f;
   --muted-foreground: #b8aa99;
-  --border: #3a3028;
+  --border: rgba(244, 234, 223, 0.1);
+  --soft: #3a3028;
   --primary: var(--foreground);
   --primary-foreground: var(--background);
   --destructive: #ffb4a8;
   --destructive-foreground: #4a2523;
   --success: #34d399;
   --success-foreground: #022c22;
-  --shadow: rgba(0, 0, 0, 0.35);
+  --shadow: rgba(0, 0, 0, 0.3);
 }
 
 * {

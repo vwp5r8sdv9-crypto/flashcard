@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { optimisticListRemove, rollbackList } from '@/lib/optimisticList'
 import { decksApi } from '../api/decksApi'
+import { clearLastOpenedDeckId } from '../lastOpenedDeck'
 import type { Deck } from '../types'
 
 /**
@@ -15,7 +16,10 @@ export function useDeleteDeck() {
 
   return useMutation({
     mutationFn: (id: string) => decksApi.remove(id),
-    onMutate: (id) => optimisticListRemove<Deck>(queryClient, ['decks'], id),
+    onMutate: (id) => {
+      clearLastOpenedDeckId(id)
+      return optimisticListRemove<Deck>(queryClient, ['decks'], id)
+    },
     onError: (_error, _id, context) => rollbackList(queryClient, context),
     onSettled: () => {
       void queryClient.invalidateQueries({ queryKey: ['decks'] })

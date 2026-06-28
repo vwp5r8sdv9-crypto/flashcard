@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Pencil, Trash2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -14,6 +15,15 @@ interface DeckCardProps {
   onDelete: () => void
 }
 
+/**
+ * The deck's chosen color is used as a muted accent, not a saturated block —
+ * only the small dot below uses the actual color. The card surface mixes a
+ * small percentage of it into the existing card/border/shadow tokens via
+ * `--deck-color` + color-mix(), set as a CSS variable (not inline
+ * background/border/shadow directly) so the existing hover:shadow utility
+ * still works — inline style would override it unconditionally and silently
+ * kill the hover transition.
+ */
 export function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
   const navigate = useNavigate()
   const { t } = useTranslation()
@@ -21,19 +31,20 @@ export function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
   const { data: dueCount } = useDueCount(deck.id)
   const language = getLanguageMeta(deck.language)
 
-  function goToDetail() {
-    void navigate(`/decks/${deck.id}`)
+  function openStudy() {
+    void navigate(`/decks/${deck.id}/study`)
   }
 
   return (
     <Card
       role="button"
       tabIndex={0}
-      onClick={goToDetail}
+      onClick={openStudy}
       onKeyDown={(event) => {
-        if (event.key === 'Enter') goToDetail()
+        if (event.key === 'Enter') openStudy()
       }}
-      className="cursor-pointer transition-shadow hover:shadow-md"
+      style={{ '--deck-color': deck.color } as CSSProperties}
+      className="cursor-pointer border-[color-mix(in_srgb,var(--deck-color)_22%,var(--border))] bg-[color-mix(in_srgb,var(--deck-color)_8%,var(--card))] shadow-[0_10px_26px_color-mix(in_srgb,var(--deck-color)_12%,var(--shadow))] transition-shadow hover:shadow-[0_10px_30px_color-mix(in_srgb,var(--deck-color)_18%,var(--shadow))]"
     >
       <div className="flex items-start justify-between">
         <span
@@ -61,11 +72,13 @@ export function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
           />
         </div>
       </div>
-      <h3 className="mt-3 font-medium break-words [overflow-wrap:anywhere]">{deck.name}</h3>
-      <p className="text-sm text-muted-foreground">
+      <h3 className="mt-4 text-lg font-semibold break-words [overflow-wrap:anywhere]">
+        {deck.name}
+      </h3>
+      <p className="mt-1 text-sm text-muted-foreground">
         {language.flag} {t(`languages.${deck.language}`)}
       </p>
-      <p className="mt-2 text-xs text-muted-foreground">
+      <p className="mt-3 text-sm text-muted-foreground">
         {t('decks.cardCount', { count: cardCount ?? 0 })} ·{' '}
         {t('study.dueCount', { count: dueCount ?? 0 })}
       </p>

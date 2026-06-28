@@ -16,7 +16,7 @@ export function CardListItem({ card, language, onEdit, onDelete }: CardListItemP
   const { t } = useTranslation()
 
   return (
-    <div className="flex items-center justify-between gap-4 rounded-md px-3 py-3 transition-colors hover:bg-muted">
+    <div className="flex items-center justify-between gap-4 rounded-2xl px-4 py-3.5 transition-colors hover:bg-card-soft">
       <div className="min-w-0 flex-1">
         <p className="truncate font-medium">{card.front}</p>
         <p className="truncate text-sm text-muted-foreground">{card.back}</p>

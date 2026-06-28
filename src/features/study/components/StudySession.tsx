@@ -3,9 +3,11 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/Button'
 import { Skeleton } from '@/components/Skeleton'
+import { CardFormDialog } from '@/features/cards/components/CardFormDialog'
 import { useCardCount } from '@/features/cards/hooks/useCardCount'
 import { useTotalCardCount } from '@/features/cards/hooks/useTotalCardCount'
 import type { CardReviewRating } from '@/domain/srs/types'
+import type { LanguageCode } from '@/lib/languages'
 import { useDueCards } from '../hooks/useDueCards'
 import { useNextDueAt } from '../hooks/useNextDueAt'
 import { useSubmitReview } from '../hooks/useSubmitReview'
@@ -15,11 +17,13 @@ import { StudySummary } from './StudySummary'
 interface StudySessionProps {
   /** Omitted for the global "study all due" session. */
   deckId?: string
+  /** The deck's study language — only needed alongside deckId, to power the empty state's inline "add first card" dialog. */
+  language?: LanguageCode
 }
 
 const EMPTY_TALLY: Record<CardReviewRating, number> = { again: 0, good: 0, easy: 0 }
 
-export function StudySession({ deckId }: StudySessionProps) {
+export function StudySession({ deckId, language }: StudySessionProps) {
   const { t, i18n } = useTranslation()
   const { data: dueCards, isLoading } = useDueCards(deckId)
   const { data: deckCardCount } = useCardCount(deckId)
@@ -28,6 +32,7 @@ export function StudySession({ deckId }: StudySessionProps) {
 
   const [revealed, setRevealed] = useState(false)
   const [tally, setTally] = useState(EMPTY_TALLY)
+  const [isAddCardOpen, setIsAddCardOpen] = useState(false)
 
   const currentCard = dueCards?.[0]
   const queueIsEmpty = !isLoading && (dueCards?.length ?? 0) === 0
@@ -72,8 +77,8 @@ export function StudySession({ deckId }: StudySessionProps) {
   if (isLoading) {
     return (
       <div>
-        <Skeleton className="h-56 w-full" />
-        <Skeleton className="mt-6 h-10 w-full" />
+        <Skeleton className="h-72 w-full" />
+        <Skeleton className="mt-6 h-11 w-full" />
       </div>
     )
   }
@@ -104,10 +109,26 @@ export function StudySession({ deckId }: StudySessionProps) {
   }
 
   if (hasNoCardsAtAll) {
+    if (deckId && language) {
+      return (
+        <div className="text-center text-muted-foreground">
+          <p className="text-base">{t('study.noCardsYet')}</p>
+          <Button onClick={() => setIsAddCardOpen(true)} className="mt-5">
+            {t('study.addFirstCard')}
+          </Button>
+          <CardFormDialog
+            open={isAddCardOpen}
+            onOpenChange={setIsAddCardOpen}
+            deckId={deckId}
+            language={language}
+          />
+        </div>
+      )
+    }
     return (
       <div className="text-center text-muted-foreground">
-        <p>{t('study.noCardsYet')}</p>
-        <Link to={deckId ? `/decks/${deckId}` : '/decks'} className="mt-4 inline-block underline">
+        <p className="text-base">{t('study.noCardsYet')}</p>
+        <Link to="/decks" className="mt-4 inline-block underline">
           {t('study.backToDecks')}
         </Link>
       </div>
@@ -116,7 +137,7 @@ export function StudySession({ deckId }: StudySessionProps) {
 
   return (
     <div className="text-center text-muted-foreground">
-      <p>{t('study.nothingDue')}</p>
+      <p className="text-base">{t('study.nothingDue')}</p>
       {nextDueAt && (
         <p className="mt-1 text-sm">
           {t('study.nextDueAt', {

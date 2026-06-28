@@ -107,7 +107,8 @@
     "cardCount_one": "{{count}} carta",
     "cardCount_other": "{{count}} cartas",
     "lastStudied": "Último estudo",
-    "backToDecks": "Seus baralhos"
+    "backToDecks": "Seus baralhos",
+    "manageCards": "Gerenciar cartas"
   },
   "cards": {
     "title": "Cartas",
@@ -138,6 +139,7 @@
     "nothingDue": "Nada pendente no momento.",
     "nextDueAt": "Próxima carta pendente em {{date}}.",
     "noCardsYet": "Adicione algumas cartas primeiro — ainda não há nada para estudar aqui.",
+    "addFirstCard": "Adicionar primeira carta",
     "backToDecks": "Voltar para seus baralhos",
     "sessionComplete": "Sessão concluída!",
     "cardsStudied_one": "{{count}} carta estudada",

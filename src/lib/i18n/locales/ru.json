@@ -113,7 +113,8 @@
     "cardCount_many": "{{count}} карточек",
     "cardCount_other": "{{count}} карточки",
     "lastStudied": "Последнее повторение",
-    "backToDecks": "Ваши колоды"
+    "backToDecks": "Ваши колоды",
+    "manageCards": "Управление карточками"
   },
   "cards": {
     "title": "Карточки",
@@ -144,6 +145,7 @@
     "nothingDue": "Сейчас нечего повторять.",
     "nextDueAt": "Следующая карточка будет готова к повторению {{date}}.",
     "noCardsYet": "Сначала добавьте карточки — здесь пока нечего изучать.",
+    "addFirstCard": "Добавить первую карточку",
     "backToDecks": "Вернуться к колодам",
     "sessionComplete": "Сессия завершена!",
     "cardsStudied_one": "{{count}} карточка повторена",

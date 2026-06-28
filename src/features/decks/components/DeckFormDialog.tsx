@@ -81,7 +81,7 @@ export function DeckFormDialog({ open, onOpenChange, deck }: DeckFormDialogProps
       onOpenChange={onOpenChange}
       title={isEditing ? t('decks.editDeck') : t('decks.newDeck')}
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" noValidate>
         <TextField label={t('decks.name')} error={errors.name?.message} {...register('name')} />
         <Select
           label={t('decks.language')}

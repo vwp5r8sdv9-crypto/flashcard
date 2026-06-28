@@ -8,7 +8,7 @@ export function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-3xl p-6">
-      <h1 className="text-2xl font-semibold">{t('settings.title')}</h1>
+      <h1 className="text-display-1">{t('settings.title')}</h1>
 
       <div className="mt-6 max-w-xs">
         <Select

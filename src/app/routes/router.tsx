@@ -1,5 +1,6 @@
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, redirect } from 'react-router-dom'
 import { AppLayout } from '@/app/layout/AppLayout'
+import { getLastOpenedDeckId } from '@/features/decks/lastOpenedDeck'
 import { AuthLayout } from './AuthLayout'
 import { RequireAuth } from './RequireAuth'
 import { RedirectIfAuthenticated } from './RedirectIfAuthenticated'
@@ -19,6 +20,22 @@ export const router = createBrowserRouter([
         children: [
           {
             path: '/',
+            // Jumps straight into whichever deck's study screen was last
+            // opened (see DeckStudyPage), so returning users land on their
+            // flashcards instead of a dashboard. Falls through to the
+            // dashboard (HomePage) when there's no recorded deck yet — a
+            // stale id (e.g. the deck was since deleted) is handled by
+            // DeckStudyPage's own "not found" state, not validated here.
+            loader: () => {
+              const lastDeckId = getLastOpenedDeckId()
+              return lastDeckId ? redirect(`/decks/${lastDeckId}/study`) : null
+            },
+            lazy: () => import('./HomePage').then((m) => ({ Component: m.HomePage })),
+          },
+          {
+            // Always shows the dashboard, regardless of the smart redirect
+            // above — the sidebar's "Home" link points here, not at `/`.
+            path: '/home',
             lazy: () => import('./HomePage').then((m) => ({ Component: m.HomePage })),
           },
           {

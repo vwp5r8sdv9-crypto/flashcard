@@ -20,18 +20,18 @@ export function Flashcard({ card, revealed, onReveal }: FlashcardProps) {
       <div className="[perspective:1200px]">
         <div
           className={cn(
-            'relative h-56 w-full transition-transform duration-300 [transform-style:preserve-3d]',
+            'relative h-72 w-full transition-transform duration-300 [transform-style:preserve-3d]',
             revealed && '[transform:rotateY(180deg)]',
           )}
         >
-          <Card className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center [backface-visibility:hidden]">
-            <p className="max-w-full text-2xl font-medium break-words [overflow-wrap:anywhere]">
+          <Card className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 text-center [backface-visibility:hidden]">
+            <p className="text-display-2 max-w-full break-words [overflow-wrap:anywhere]">
               {card.front}
             </p>
             <SpeakButton text={card.front} lang={card.language} />
           </Card>
-          <Card className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center [backface-visibility:hidden] [transform:rotateY(180deg)]">
-            <p className="max-w-full text-2xl font-medium break-words [overflow-wrap:anywhere]">
+          <Card className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 text-center [backface-visibility:hidden] [transform:rotateY(180deg)]">
+            <p className="text-display-2 max-w-full break-words [overflow-wrap:anywhere]">
               {card.back}
             </p>
             <SpeakButton text={card.back} lang={card.language} />

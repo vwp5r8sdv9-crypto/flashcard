@@ -104,7 +104,8 @@
     "deleteConfirmDescription": "この操作は取り消せません。",
     "cardCount_other": "{{count}} 枚のカード",
     "lastStudied": "最終学習日",
-    "backToDecks": "あなたのデッキ"
+    "backToDecks": "あなたのデッキ",
+    "manageCards": "カードを管理"
   },
   "cards": {
     "title": "カード",
@@ -135,6 +136,7 @@
     "nothingDue": "現在、復習するカードはありません。",
     "nextDueAt": "次のカードは {{date}} に復習可能になります。",
     "noCardsYet": "まずカードを追加してください。学習できるカードがまだありません。",
+    "addFirstCard": "最初のカードを追加",
     "backToDecks": "デッキ一覧に戻る",
     "sessionComplete": "学習完了！",
     "cardsStudied_other": "{{count}} 枚のカードを学習しました",

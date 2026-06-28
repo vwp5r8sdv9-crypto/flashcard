@@ -35,7 +35,7 @@ export function Dialog({
         <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/50 data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out" />
         <DialogPrimitive.Content
           className={cn(
-            'fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-lg bg-card p-6 shadow-lg focus:outline-none data-[state=open]:animate-dialog-in data-[state=closed]:animate-dialog-out',
+            'fixed left-1/2 top-[6vh] z-50 max-h-[88dvh] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 overflow-y-auto rounded-[28px] bg-card p-6 shadow-lg focus:outline-none data-[state=open]:animate-dialog-in data-[state=closed]:animate-dialog-out sm:top-1/2 sm:max-h-[85vh] sm:-translate-y-1/2',
             className,
           )}
         >
@@ -45,7 +45,7 @@ export function Dialog({
               {description}
             </DialogPrimitive.Description>
           )}
-          <div className="mt-4">{children}</div>
+          <div className="mt-5">{children}</div>
           <DialogPrimitive.Close asChild>
             <IconButton
               icon={X}
