@@ -16,8 +16,8 @@ export default defineConfig({
         name: 'Flashcards',
         short_name: 'Flashcards',
         description: 'Custom flashcard decks with spaced repetition, for any language or subject.',
-        theme_color: '#0f172a',
-        background_color: '#0f172a',
+        theme_color: '#4f46e5',
+        background_color: '#ffffff',
         display: 'standalone',
         start_url: '/',
         // The SVG mark from src/components/Logo.tsx — a real multi-resolution

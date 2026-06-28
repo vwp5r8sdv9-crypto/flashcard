@@ -73,7 +73,7 @@ Index: `decks(user_id)`.
 | `created_at`       | `timestamptz`, default `now()`                             |                                                                      |
 | `updated_at`       | `timestamptz`, default `now()`                             |                                                                      |
 
-Index: `cards(deck_id)` (also speeds up the cascade delete when a deck is removed).
+Indexes: `cards(deck_id)` (also speeds up the cascade delete when a deck is removed) and `cards(user_id)` (the RLS policy below filters directly on `user_id`, and `cardsApi.countAll()` queries every card a user owns with no `deck_id` filter at all — without this index, that query and the RLS check on every other query fall back to a full table scan).
 
 **Decision:** `front`/`back`/`notes` are plain `text`, not JSON/rich-text, for the MVP.
 **Why:** Matches the MVP scope (plain-text cards); rich content (images/audio/formatting) is an explicit fast-follow (see [Roadmap](13-roadmap.md)) and would change this to a structured format — deferring it avoids designing for a feature that isn't built yet.
@@ -98,7 +98,9 @@ Index: **composite `card_review_state(user_id, due_at)`**. The study session's c
 
 **Decision:** Scheduling state is a separate table from `cards`, not extra columns on `cards`.
 **Why:** Keeps `cards` purely about _content_ (what import/export cares about) and `card_review_state` purely about _scheduling progress_. This separation means export/import logic doesn't need to special-case scheduling columns, and a future "reset my progress on this deck" feature is a delete on one table, not a selective column reset on another.
-**Note on the algorithm itself:** the exact constants and transition rules (how much `ease_factor` changes on "Again" vs "Easy", how `interval_days` is computed) are an SM-2-family algorithm and are an implementation detail of the `domain/srs` module (see [Architecture](04-architecture.md)) finalized when the study module is actually built — not decided in this document, since this is a design doc, not an implementation.
+**Note on the algorithm itself:** the exact constants and transition rules (how much `ease_factor` changes on "Again" vs "Easy", how `interval_days` is computed) are an SM-2-family algorithm implemented as a pure function in `src/domain/srs/scheduleReview.ts` (see [Architecture](04-architecture.md)) — finalized in ADR-0023, not decided in this document, since this is a design doc, not an implementation.
+
+**Note on row creation:** every `cards` insert automatically gets a matching `card_review_state` row via a database trigger (`handle_new_card`, mirroring `handle_new_user` above), not application code — see `supabase/migrations/20260628202438_card_review_state_trigger.sql` and ADR-0023.
 **Note on `state`/`rating` as `text` + `check`, not a native Postgres `enum`:** both this column and `review_logs.rating` (below) use `text` with a `check` constraint listing valid values, rather than a Postgres `enum` type. A `check` constraint is altered with an ordinary migration (`alter table ... drop constraint ..., add constraint ...`); native enum types require a separate, more awkward catalog change (`alter type ... add value`). Since this list of states/ratings may plausibly grow (e.g. a future "suspended" state), the more easily extensible option was chosen deliberately.
 
 ### `review_logs`

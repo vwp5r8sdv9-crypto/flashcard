@@ -22,6 +22,7 @@ export function useDeleteDeck() {
       // Cards are gone server-side via cascade; refresh any cached card
       // queries (lists, counts) so the UI doesn't show stale data for them.
       void queryClient.invalidateQueries({ queryKey: ['cards'] })
+      void queryClient.invalidateQueries({ queryKey: ['study'] })
     },
   })
 }

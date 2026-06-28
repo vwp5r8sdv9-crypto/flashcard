@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
+import { X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { IconButton } from '@/components/IconButton'
 import { cn } from '@/lib/utils'
 
 interface DialogProps {
@@ -30,10 +32,10 @@ export function Dialog({
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/50" />
+        <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/50 data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out" />
         <DialogPrimitive.Content
           className={cn(
-            'fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-lg bg-background p-6 shadow-lg focus:outline-none',
+            'fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-lg bg-background p-6 shadow-lg focus:outline-none data-[state=open]:animate-dialog-in data-[state=closed]:animate-dialog-out',
             className,
           )}
         >
@@ -44,11 +46,12 @@ export function Dialog({
             </DialogPrimitive.Description>
           )}
           <div className="mt-4">{children}</div>
-          <DialogPrimitive.Close
-            aria-label={t('common.close')}
-            className="absolute right-4 top-4 text-muted-foreground hover:text-foreground"
-          >
-            ✕
+          <DialogPrimitive.Close asChild>
+            <IconButton
+              icon={X}
+              label={t('common.close')}
+              className="absolute right-4 top-4 text-muted-foreground"
+            />
           </DialogPrimitive.Close>
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>

@@ -1,14 +1,18 @@
 import { Pencil, Trash2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { IconButton } from '@/components/IconButton'
+import { SpeakButton } from '@/components/SpeakButton'
+import type { LanguageCode } from '@/lib/languages'
 import type { Card } from '../types'
 
 interface CardListItemProps {
   card: Card
+  language: LanguageCode
   onEdit: () => void
   onDelete: () => void
 }
 
-export function CardListItem({ card, onEdit, onDelete }: CardListItemProps) {
+export function CardListItem({ card, language, onEdit, onDelete }: CardListItemProps) {
   const { t } = useTranslation()
 
   return (
@@ -18,22 +22,14 @@ export function CardListItem({ card, onEdit, onDelete }: CardListItemProps) {
         <p className="truncate text-sm text-muted-foreground">{card.back}</p>
       </div>
       <div className="flex shrink-0 gap-1 text-muted-foreground">
-        <button
-          type="button"
-          aria-label={`${t('common.edit')}: ${card.front}`}
-          onClick={onEdit}
-          className="rounded p-1.5 hover:bg-border hover:text-foreground"
-        >
-          <Pencil className="h-4 w-4" aria-hidden />
-        </button>
-        <button
-          type="button"
-          aria-label={`${t('common.delete')}: ${card.front}`}
+        <SpeakButton text={card.front} lang={language} />
+        <IconButton icon={Pencil} label={`${t('common.edit')}: ${card.front}`} onClick={onEdit} />
+        <IconButton
+          icon={Trash2}
+          label={`${t('common.delete')}: ${card.front}`}
           onClick={onDelete}
-          className="rounded p-1.5 hover:bg-border hover:text-destructive"
-        >
-          <Trash2 className="h-4 w-4" aria-hidden />
-        </button>
+          variant="destructive"
+        />
       </div>
     </div>
   )

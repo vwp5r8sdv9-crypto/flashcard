@@ -110,6 +110,12 @@ create table public.cards (
 
 create index cards_deck_id_idx on public.cards (deck_id);
 
+-- RLS's `using` clause filters directly on user_id (see policy below), and
+-- `cardsApi.countAll()` queries every card a user owns with no deck_id
+-- filter at all — without this index that query (and the RLS check
+-- evaluated on every other query) falls back to a full table scan.
+create index cards_user_id_idx on public.cards (user_id);
+
 alter table public.cards enable row level security;
 
 create trigger cards_set_updated_at

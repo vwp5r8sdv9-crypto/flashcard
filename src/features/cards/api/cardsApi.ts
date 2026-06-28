@@ -23,7 +23,8 @@ export interface CardsRepository {
   removeByDeck(deckId: string): Promise<void>
 }
 
-function mapRow(row: CardRow): Card {
+/** Exported for reuse by other repositories that read `cards` rows directly (e.g. studyApi). */
+export function mapCardRow(row: CardRow): Card {
   return {
     id: row.id,
     deckId: row.deck_id,
@@ -45,7 +46,7 @@ export const cardsApi: CardsRepository = {
       .eq('deck_id', deckId)
       .order('created_at', { ascending: true })
     if (error) throw error
-    return data.map(mapRow)
+    return data.map(mapCardRow)
   },
 
   async countByDeck(deckId) {
@@ -68,7 +69,7 @@ export const cardsApi: CardsRepository = {
   async getById(id) {
     const { data, error } = await supabase.from('cards').select('*').eq('id', id).maybeSingle()
     if (error) throw error
-    return data ? mapRow(data) : null
+    return data ? mapCardRow(data) : null
   },
 
   async create(input) {
@@ -85,7 +86,7 @@ export const cardsApi: CardsRepository = {
       .select()
       .single()
     if (error) throw error
-    return mapRow(data)
+    return mapCardRow(data)
   },
 
   async update(id, input) {
@@ -103,7 +104,7 @@ export const cardsApi: CardsRepository = {
       .select()
       .single()
     if (error) throw error
-    return mapRow(data)
+    return mapCardRow(data)
   },
 
   async remove(id) {

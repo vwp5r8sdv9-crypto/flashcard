@@ -14,19 +14,40 @@ export interface SupabaseMockError {
   message: string
 }
 
-function matchesFilters(row: Row, filters: [string, unknown][]): boolean {
-  return filters.every(([column, value]) => row[column] === value)
+interface Filter {
+  column: string
+  op: 'eq' | 'lte' | 'gte' | 'in'
+  value: unknown
+}
+
+function matchesFilter(row: Row, filter: Filter): boolean {
+  const rowValue = row[filter.column]
+  switch (filter.op) {
+    case 'eq':
+      return rowValue === filter.value
+    case 'lte':
+      return String(rowValue) <= String(filter.value)
+    case 'gte':
+      return String(rowValue) >= String(filter.value)
+    case 'in':
+      return (filter.value as unknown[]).includes(rowValue)
+  }
+}
+
+function matchesFilters(row: Row, filters: Filter[]): boolean {
+  return filters.every((filter) => matchesFilter(row, filter))
 }
 
 export function createSupabaseMock() {
   let tables: Record<string, Row[]> = {}
 
   const from = (tableName: string) => {
-    const filters: [string, unknown][] = []
+    const filters: Filter[] = []
     let mode: 'select' | 'insert' | 'update' | 'delete' = 'select'
     let insertPayload: Row | null = null
     let updatePayload: Row | null = null
     let orderBy: { column: string; ascending: boolean } | null = null
+    let limitCount: number | null = null
     let countOptions: { head: boolean } | null = null
     let single = false
     let maybeSingle = false
@@ -76,6 +97,9 @@ export function createSupabaseMock() {
           return ascending ? cmp : -cmp
         })
       }
+      if (limitCount !== null) {
+        result = result.slice(0, limitCount)
+      }
       if (countOptions) {
         return { data: countOptions.head ? null : result, count: result.length, error: null }
       }
@@ -111,11 +135,27 @@ export function createSupabaseMock() {
         return builder
       },
       eq(column: string, value: unknown) {
-        filters.push([column, value])
+        filters.push({ column, op: 'eq', value })
+        return builder
+      },
+      lte(column: string, value: unknown) {
+        filters.push({ column, op: 'lte', value })
+        return builder
+      },
+      gte(column: string, value: unknown) {
+        filters.push({ column, op: 'gte', value })
+        return builder
+      },
+      in(column: string, value: unknown[]) {
+        filters.push({ column, op: 'in', value })
         return builder
       },
       order(column: string, options?: { ascending?: boolean }) {
         orderBy = { column, ascending: options?.ascending ?? true }
+        return builder
+      },
+      limit(count: number) {
+        limitCount = count
         return builder
       },
       single() {

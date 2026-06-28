@@ -7,7 +7,8 @@
     "close": "Close",
     "loading": "Loading…",
     "somethingWentWrong": "Something went wrong. Please try again.",
-    "optional": "optional"
+    "optional": "optional",
+    "playPronunciation": "Play pronunciation"
   },
   "nav": {
     "home": "Home",
@@ -88,6 +89,16 @@
     "languageRequired": "Pick a language",
     "colorRequired": "Pick a color",
     "selectColor": "Select color {{color}}",
+    "colorNames": {
+      "slate": "Slate",
+      "blueGray": "Blue Gray",
+      "sage": "Sage",
+      "olive": "Olive",
+      "indigo": "Indigo",
+      "amber": "Amber",
+      "rose": "Rose",
+      "teal": "Teal"
+    },
     "createDeck": "Create deck",
     "saveChanges": "Save changes",
     "empty": "No decks yet — create your first one to start studying.",
@@ -96,7 +107,6 @@
     "cardCount_one": "{{count}} card",
     "cardCount_other": "{{count}} cards",
     "lastStudied": "Last studied",
-    "neverStudied": "Never studied",
     "backToDecks": "Your decks"
   },
   "cards": {
@@ -118,10 +128,36 @@
     "deleteConfirmTitle": "Delete this card?",
     "deleteConfirmDescription": "This can't be undone."
   },
+  "study": {
+    "title": "Study",
+    "allDueDescription": "Every due card across all your decks, in one combined queue.",
+    "showAnswer": "Show answer",
+    "again": "Again",
+    "good": "Good",
+    "easy": "Easy",
+    "nothingDue": "Nothing due right now.",
+    "nextDueAt": "Next card due {{date}}.",
+    "noCardsYet": "Add some cards first — there's nothing here to study yet.",
+    "backToDecks": "Back to your decks",
+    "sessionComplete": "Session complete!",
+    "cardsStudied_one": "{{count}} card studied",
+    "cardsStudied_other": "{{count}} cards studied",
+    "dueCount_one": "{{count}} card due",
+    "dueCount_other": "{{count}} cards due",
+    "dueToday": "Due today",
+    "studyNow": "Study",
+    "studyAllDue_one": "Study {{count}} due card",
+    "studyAllDue_other": "Study {{count}} due cards"
+  },
   "settings": {
     "title": "Settings",
     "language": "Language",
-    "languageDescription": "Choose the language the app is displayed in."
+    "languageDescription": "Choose the language the app is displayed in.",
+    "theme": "Theme",
+    "theme_light": "Light",
+    "theme_dark": "Dark",
+    "theme_system": "System",
+    "themeDescription": "Choose how the app looks, or match your system setting."
   },
   "languages": {
     "en": "English",

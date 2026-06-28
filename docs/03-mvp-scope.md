@@ -13,7 +13,7 @@ The MVP exists to prove the core loop from [Goals](02-goals.md): create a deck, 
 
 - Create, rename/edit (name, language, color for visual identification), delete a deck — with a confirmation step before delete.
 - **Every deck represents one study language**, chosen from the same five the UI supports (see §Internationalization) — a deliberate narrowing of [Product Vision](01-product-vision.md)'s "any language, any subject" framing for now, not a reversal of it; see ADR-0017 for the reasoning and what would need to change to support non-language (e.g. "any subject") decks again.
-- List all of a user's decks as responsive cards showing color, language, card count, and last-studied (placeholder until studying exists); clicking one opens its detail page.
+- List all of a user's decks as responsive cards showing color, language, card count, and due-card count; clicking one opens its detail page.
 
 ### Flashcards
 

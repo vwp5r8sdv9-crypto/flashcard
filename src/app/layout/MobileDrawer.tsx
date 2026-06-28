@@ -1,6 +1,7 @@
 import { X } from 'lucide-react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { useTranslation } from 'react-i18next'
+import { IconButton } from '@/components/IconButton'
 import { Logo } from '@/components/Logo'
 import { SidebarNavLinks } from './SidebarNavLinks'
 import { SidebarFooter } from './SidebarFooter'
@@ -27,11 +28,8 @@ export function MobileDrawer({ open, onOpenChange }: MobileDrawerProps) {
           <DialogPrimitive.Title className="sr-only">{t('nav.openMenu')}</DialogPrimitive.Title>
           <div className="flex items-center justify-between">
             <Logo />
-            <DialogPrimitive.Close
-              aria-label={t('nav.closeMenu')}
-              className="rounded p-2 text-muted-foreground hover:bg-muted hover:text-foreground"
-            >
-              <X className="h-5 w-5" aria-hidden />
+            <DialogPrimitive.Close asChild>
+              <IconButton icon={X} label={t('nav.closeMenu')} className="text-muted-foreground" />
             </DialogPrimitive.Close>
           </div>
           <SidebarNavLinks onNavigate={() => onOpenChange(false)} />

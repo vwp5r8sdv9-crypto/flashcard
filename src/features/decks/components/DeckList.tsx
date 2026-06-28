@@ -1,7 +1,9 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/Button'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
+import { useDueCount } from '@/features/study/hooks/useDueCount'
 import { useDecks } from '../hooks/useDecks'
 import { useDeleteDeck } from '../hooks/useDeleteDeck'
 import { DeckCard } from './DeckCard'
@@ -11,6 +13,7 @@ import type { Deck } from '../types'
 export function DeckList() {
   const { t } = useTranslation()
   const { data: decks, isLoading } = useDecks()
+  const { data: dueCount } = useDueCount()
   const deleteDeck = useDeleteDeck()
 
   const [isFormOpen, setIsFormOpen] = useState(false)
@@ -29,9 +32,16 @@ export function DeckList() {
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex items-center justify-between gap-3">
         <h1 className="text-2xl font-semibold">{t('decks.title')}</h1>
-        <Button onClick={openCreateForm}>{t('decks.newDeck')}</Button>
+        <div className="flex items-center gap-3">
+          {Boolean(dueCount) && (
+            <Link to="/study" className="text-sm text-primary underline">
+              {t('study.studyAllDue', { count: dueCount })}
+            </Link>
+          )}
+          <Button onClick={openCreateForm}>{t('decks.newDeck')}</Button>
+        </div>
       </div>
 
       {isLoading && <p className="text-muted-foreground">{t('common.loading')}</p>}

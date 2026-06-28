@@ -30,6 +30,14 @@ export const router = createBrowserRouter([
             lazy: () => import('./DeckDetailPage').then((m) => ({ Component: m.DeckDetailPage })),
           },
           {
+            path: '/decks/:deckId/study',
+            lazy: () => import('./DeckStudyPage').then((m) => ({ Component: m.DeckStudyPage })),
+          },
+          {
+            path: '/study',
+            lazy: () => import('./StudyPage').then((m) => ({ Component: m.StudyPage })),
+          },
+          {
             path: '/settings',
             lazy: () => import('./SettingsPage').then((m) => ({ Component: m.SettingsPage })),
           },

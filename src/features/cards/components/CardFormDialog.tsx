@@ -1,11 +1,13 @@
 import { useEffect, useMemo } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useTranslation } from 'react-i18next'
 import { Dialog } from '@/components/Dialog'
 import { Button } from '@/components/Button'
 import { TextField } from '@/components/TextField'
+import { SpeakButton } from '@/components/SpeakButton'
+import type { LanguageCode } from '@/lib/languages'
 import { useCreateCard } from '../hooks/useCreateCard'
 import { useUpdateCard } from '../hooks/useUpdateCard'
 import type { Card } from '../types'
@@ -14,6 +16,8 @@ interface CardFormDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   deckId: string
+  /** The deck's study language — used to pronounce the front/back fields while editing. */
+  language: LanguageCode
   /** Pass a card to edit it; omit to create a new one. */
   card?: Card | null
 }
@@ -36,7 +40,13 @@ function toDefaultValues(card?: Card | null): CardFormValues {
   }
 }
 
-export function CardFormDialog({ open, onOpenChange, deckId, card }: CardFormDialogProps) {
+export function CardFormDialog({
+  open,
+  onOpenChange,
+  deckId,
+  language,
+  card,
+}: CardFormDialogProps) {
   const { t } = useTranslation()
   const isEditing = Boolean(card)
   const createCard = useCreateCard()
@@ -58,11 +68,14 @@ export function CardFormDialog({ open, onOpenChange, deckId, card }: CardFormDia
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<CardFormValues>({
     resolver: zodResolver(cardFormSchema),
     defaultValues: toDefaultValues(card),
   })
+  const front = useWatch({ control, name: 'front' })
+  const back = useWatch({ control, name: 'back' })
 
   useEffect(() => {
     if (open) reset(toDefaultValues(card))
@@ -99,8 +112,22 @@ export function CardFormDialog({ open, onOpenChange, deckId, card }: CardFormDia
       title={isEditing ? t('cards.editCard') : t('cards.newCard')}
     >
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
-        <TextField label={t('cards.front')} error={errors.front?.message} {...register('front')} />
-        <TextField label={t('cards.back')} error={errors.back?.message} {...register('back')} />
+        <div className="flex items-end gap-2">
+          <div className="flex-1">
+            <TextField
+              label={t('cards.front')}
+              error={errors.front?.message}
+              {...register('front')}
+            />
+          </div>
+          <SpeakButton text={front} lang={language} />
+        </div>
+        <div className="flex items-end gap-2">
+          <div className="flex-1">
+            <TextField label={t('cards.back')} error={errors.back?.message} {...register('back')} />
+          </div>
+          <SpeakButton text={back} lang={language} />
+        </div>
         <TextField
           label={`${t('cards.pronunciation')} (${t('common.optional')})`}
           {...register('pronunciation')}

@@ -2,8 +2,10 @@ import { useNavigate } from 'react-router-dom'
 import { Pencil, Trash2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Card } from '@/components/Card'
+import { IconButton } from '@/components/IconButton'
 import { getLanguageMeta } from '@/lib/languages'
 import { useCardCount } from '@/features/cards/hooks/useCardCount'
+import { useDueCount } from '@/features/study/hooks/useDueCount'
 import type { Deck } from '../types'
 
 interface DeckCardProps {
@@ -16,6 +18,7 @@ export function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { data: cardCount } = useCardCount(deck.id)
+  const { data: dueCount } = useDueCount(deck.id)
   const language = getLanguageMeta(deck.language)
 
   function goToDetail() {
@@ -39,28 +42,23 @@ export function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
           aria-hidden
         />
         <div className="flex gap-1 text-muted-foreground">
-          <button
-            type="button"
-            aria-label={`${t('common.edit')}: ${deck.name}`}
+          <IconButton
+            icon={Pencil}
+            label={`${t('common.edit')}: ${deck.name}`}
             onClick={(event) => {
               event.stopPropagation()
               onEdit()
             }}
-            className="rounded p-1 hover:bg-border hover:text-foreground"
-          >
-            <Pencil className="h-4 w-4" aria-hidden />
-          </button>
-          <button
-            type="button"
-            aria-label={`${t('common.delete')}: ${deck.name}`}
+          />
+          <IconButton
+            icon={Trash2}
+            label={`${t('common.delete')}: ${deck.name}`}
             onClick={(event) => {
               event.stopPropagation()
               onDelete()
             }}
-            className="rounded p-1 hover:bg-border hover:text-destructive"
-          >
-            <Trash2 className="h-4 w-4" aria-hidden />
-          </button>
+            variant="destructive"
+          />
         </div>
       </div>
       <h3 className="mt-3 font-medium">{deck.name}</h3>
@@ -68,7 +66,8 @@ export function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
         {language.flag} {t(`languages.${deck.language}`)}
       </p>
       <p className="mt-2 text-xs text-muted-foreground">
-        {t('decks.cardCount', { count: cardCount ?? 0 })} · {t('decks.neverStudied')}
+        {t('decks.cardCount', { count: cardCount ?? 0 })} ·{' '}
+        {t('study.dueCount', { count: dueCount ?? 0 })}
       </p>
     </Card>
   )

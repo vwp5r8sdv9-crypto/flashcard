@@ -7,7 +7,8 @@
     "close": "Schließen",
     "loading": "Wird geladen…",
     "somethingWentWrong": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
-    "optional": "optional"
+    "optional": "optional",
+    "playPronunciation": "Aussprache abspielen"
   },
   "nav": {
     "home": "Start",
@@ -88,6 +89,16 @@
     "languageRequired": "Wählen Sie eine Sprache",
     "colorRequired": "Wählen Sie eine Farbe",
     "selectColor": "Farbe {{color}} auswählen",
+    "colorNames": {
+      "slate": "Schiefer",
+      "blueGray": "Blaugrau",
+      "sage": "Salbei",
+      "olive": "Oliv",
+      "indigo": "Indigo",
+      "amber": "Amber",
+      "rose": "Altrosa",
+      "teal": "Petrol"
+    },
     "createDeck": "Deck erstellen",
     "saveChanges": "Änderungen speichern",
     "empty": "Noch keine Decks — erstellen Sie Ihr erstes, um zu lernen.",
@@ -96,7 +107,6 @@
     "cardCount_one": "{{count}} Karte",
     "cardCount_other": "{{count}} Karten",
     "lastStudied": "Zuletzt gelernt",
-    "neverStudied": "Noch nicht gelernt",
     "backToDecks": "Deine Decks"
   },
   "cards": {
@@ -118,10 +128,36 @@
     "deleteConfirmTitle": "Diese Karte löschen?",
     "deleteConfirmDescription": "Dies kann nicht rückgängig gemacht werden."
   },
+  "study": {
+    "title": "Lernen",
+    "allDueDescription": "Alle fälligen Karten aus all Ihren Decks, in einer gemeinsamen Warteschlange.",
+    "showAnswer": "Antwort anzeigen",
+    "again": "Nochmal",
+    "good": "Gut",
+    "easy": "Leicht",
+    "nothingDue": "Aktuell nichts fällig.",
+    "nextDueAt": "Nächste Karte fällig {{date}}.",
+    "noCardsYet": "Fügen Sie zuerst Karten hinzu — hier gibt es noch nichts zu lernen.",
+    "backToDecks": "Zurück zu deinen Decks",
+    "sessionComplete": "Lerneinheit abgeschlossen!",
+    "cardsStudied_one": "{{count}} Karte gelernt",
+    "cardsStudied_other": "{{count}} Karten gelernt",
+    "dueCount_one": "{{count}} Karte fällig",
+    "dueCount_other": "{{count}} Karten fällig",
+    "dueToday": "Heute fällig",
+    "studyNow": "Lernen",
+    "studyAllDue_one": "{{count}} fällige Karte lernen",
+    "studyAllDue_other": "{{count}} fällige Karten lernen"
+  },
   "settings": {
     "title": "Einstellungen",
     "language": "Sprache",
-    "languageDescription": "Wählen Sie die Anzeigesprache der App."
+    "languageDescription": "Wählen Sie die Anzeigesprache der App.",
+    "theme": "Design",
+    "theme_light": "Hell",
+    "theme_dark": "Dunkel",
+    "theme_system": "System",
+    "themeDescription": "Wählen Sie das Erscheinungsbild der App oder folgen Sie Ihrer Systemeinstellung."
   },
   "languages": {
     "en": "Englisch",

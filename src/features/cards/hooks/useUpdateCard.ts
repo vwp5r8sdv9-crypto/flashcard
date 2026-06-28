@@ -20,6 +20,8 @@ export function useUpdateCard() {
     onError: (_error, _variables, context) => rollbackList(queryClient, context),
     onSettled: () => {
       void queryClient.invalidateQueries({ queryKey: ['cards'] })
+      // Study queues embed each card's front/back directly (see DueCard).
+      void queryClient.invalidateQueries({ queryKey: ['study'] })
     },
   })
 }

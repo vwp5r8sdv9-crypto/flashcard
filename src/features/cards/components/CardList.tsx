@@ -3,6 +3,7 @@ import { Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/Button'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
+import { Skeleton } from '@/components/Skeleton'
 import type { LanguageCode } from '@/lib/languages'
 import { useCards } from '../hooks/useCards'
 import { useDeleteCard } from '../hooks/useDeleteCard'
@@ -71,7 +72,18 @@ export function CardList({ deckId, language }: CardListProps) {
         </div>
       </div>
 
-      {isLoading && <p className="text-muted-foreground">{t('common.loading')}</p>}
+      {isLoading && (
+        <div className="flex flex-col divide-y divide-border rounded-lg border border-border">
+          {[0, 1, 2].map((key) => (
+            <div key={key} className="flex items-center gap-4 px-3 py-3">
+              <div className="min-w-0 flex-1 space-y-2">
+                <Skeleton className="h-4 w-1/3" />
+                <Skeleton className="h-3 w-1/2" />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {!isLoading && cards?.length === 0 && (
         <p className="text-muted-foreground">{t('cards.empty')}</p>
@@ -87,6 +99,7 @@ export function CardList({ deckId, language }: CardListProps) {
             <CardListItem
               key={card.id}
               card={card}
+              language={language}
               onEdit={() => openEditForm(card)}
               onDelete={() => setDeletingCard(card)}
             />
@@ -98,6 +111,7 @@ export function CardList({ deckId, language }: CardListProps) {
         open={isFormOpen}
         onOpenChange={setIsFormOpen}
         deckId={deckId}
+        language={language}
         card={editingCard}
       />
 

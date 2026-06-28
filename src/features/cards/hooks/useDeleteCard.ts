@@ -19,6 +19,8 @@ export function useDeleteCard() {
     onError: (_error, _variables, context) => rollbackList(queryClient, context),
     onSettled: () => {
       void queryClient.invalidateQueries({ queryKey: ['cards'] })
+      // Deleting a card cascades to its card_review_state row server-side.
+      void queryClient.invalidateQueries({ queryKey: ['study'] })
     },
   })
 }

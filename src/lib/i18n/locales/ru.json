@@ -7,7 +7,8 @@
     "close": "Закрыть",
     "loading": "Загрузка…",
     "somethingWentWrong": "Что-то пошло не так. Попробуйте снова.",
-    "optional": "необязательно"
+    "optional": "необязательно",
+    "playPronunciation": "Воспроизвести произношение"
   },
   "nav": {
     "home": "Главная",
@@ -92,6 +93,16 @@
     "languageRequired": "Выберите язык",
     "colorRequired": "Выберите цвет",
     "selectColor": "Выбрать цвет {{color}}",
+    "colorNames": {
+      "slate": "Сланцевый",
+      "blueGray": "Серо-голубой",
+      "sage": "Шалфейный",
+      "olive": "Оливковый",
+      "indigo": "Индиго",
+      "amber": "Янтарный",
+      "rose": "Дымчато-розовый",
+      "teal": "Бирюзовый"
+    },
     "createDeck": "Создать колоду",
     "saveChanges": "Сохранить изменения",
     "empty": "Колод пока нет — создайте первую, чтобы начать учиться.",
@@ -102,7 +113,6 @@
     "cardCount_many": "{{count}} карточек",
     "cardCount_other": "{{count}} карточки",
     "lastStudied": "Последнее повторение",
-    "neverStudied": "Ещё не изучалось",
     "backToDecks": "Ваши колоды"
   },
   "cards": {
@@ -124,10 +134,42 @@
     "deleteConfirmTitle": "Удалить эту карточку?",
     "deleteConfirmDescription": "Это действие нельзя отменить."
   },
+  "study": {
+    "title": "Повторение",
+    "allDueDescription": "Все карточки, которые пора повторить, из всех ваших колод — в одной общей очереди.",
+    "showAnswer": "Показать ответ",
+    "again": "Снова",
+    "good": "Хорошо",
+    "easy": "Легко",
+    "nothingDue": "Сейчас нечего повторять.",
+    "nextDueAt": "Следующая карточка будет готова к повторению {{date}}.",
+    "noCardsYet": "Сначала добавьте карточки — здесь пока нечего изучать.",
+    "backToDecks": "Вернуться к колодам",
+    "sessionComplete": "Сессия завершена!",
+    "cardsStudied_one": "{{count}} карточка повторена",
+    "cardsStudied_few": "{{count}} карточки повторены",
+    "cardsStudied_many": "{{count}} карточек повторено",
+    "cardsStudied_other": "{{count}} карточки повторены",
+    "dueCount_one": "{{count}} карточка к повторению",
+    "dueCount_few": "{{count}} карточки к повторению",
+    "dueCount_many": "{{count}} карточек к повторению",
+    "dueCount_other": "{{count}} карточки к повторению",
+    "dueToday": "К повторению сегодня",
+    "studyNow": "Повторить",
+    "studyAllDue_one": "Повторить {{count}} карточку",
+    "studyAllDue_few": "Повторить {{count}} карточки",
+    "studyAllDue_many": "Повторить {{count}} карточек",
+    "studyAllDue_other": "Повторить {{count}} карточки"
+  },
   "settings": {
     "title": "Настройки",
     "language": "Язык",
-    "languageDescription": "Выберите язык интерфейса приложения."
+    "languageDescription": "Выберите язык интерфейса приложения.",
+    "theme": "Тема",
+    "theme_light": "Светлая",
+    "theme_dark": "Тёмная",
+    "theme_system": "Системная",
+    "themeDescription": "Выберите внешний вид приложения или используйте настройку системы."
   },
   "languages": {
     "en": "Английский",

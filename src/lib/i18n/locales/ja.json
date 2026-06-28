@@ -7,7 +7,8 @@
     "close": "閉じる",
     "loading": "読み込み中…",
     "somethingWentWrong": "問題が発生しました。もう一度お試しください。",
-    "optional": "任意"
+    "optional": "任意",
+    "playPronunciation": "発音を再生"
   },
   "nav": {
     "home": "ホーム",
@@ -86,6 +87,16 @@
     "languageRequired": "言語を選択してください",
     "colorRequired": "カラーを選択してください",
     "selectColor": "カラー {{color}} を選択",
+    "colorNames": {
+      "slate": "スレート",
+      "blueGray": "ブルーグレー",
+      "sage": "セージ",
+      "olive": "オリーブ",
+      "indigo": "インディゴ",
+      "amber": "アンバー",
+      "rose": "ローズ",
+      "teal": "ティール"
+    },
     "createDeck": "デッキを作成",
     "saveChanges": "変更を保存",
     "empty": "デッキがまだありません。最初のデッキを作成して学習を始めましょう。",
@@ -93,7 +104,6 @@
     "deleteConfirmDescription": "この操作は取り消せません。",
     "cardCount_other": "{{count}} 枚のカード",
     "lastStudied": "最終学習日",
-    "neverStudied": "まだ学習していません",
     "backToDecks": "あなたのデッキ"
   },
   "cards": {
@@ -115,10 +125,33 @@
     "deleteConfirmTitle": "このカードを削除しますか？",
     "deleteConfirmDescription": "この操作は取り消せません。"
   },
+  "study": {
+    "title": "学習",
+    "allDueDescription": "すべてのデッキの復習期限が来たカードを、ひとつのキューでまとめて学習できます。",
+    "showAnswer": "答えを表示",
+    "again": "もう一度",
+    "good": "普通",
+    "easy": "簡単",
+    "nothingDue": "現在、復習するカードはありません。",
+    "nextDueAt": "次のカードは {{date}} に復習可能になります。",
+    "noCardsYet": "まずカードを追加してください。学習できるカードがまだありません。",
+    "backToDecks": "デッキ一覧に戻る",
+    "sessionComplete": "学習完了！",
+    "cardsStudied_other": "{{count}} 枚のカードを学習しました",
+    "dueCount_other": "{{count}} 枚が復習待ち",
+    "dueToday": "今日の復習",
+    "studyNow": "学習する",
+    "studyAllDue_other": "復習待ちの {{count}} 枚を学習する"
+  },
   "settings": {
     "title": "設定",
     "language": "言語",
-    "languageDescription": "アプリの表示言語を選択してください。"
+    "languageDescription": "アプリの表示言語を選択してください。",
+    "theme": "テーマ",
+    "theme_light": "ライト",
+    "theme_dark": "ダーク",
+    "theme_system": "システム",
+    "themeDescription": "アプリの見た目を選択するか、システム設定に合わせます。"
   },
   "languages": {
     "en": "英語",

@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { Select } from '@/components/Select'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { SUPPORTED_LANGUAGES } from '@/lib/languages'
 
 export function SettingsPage() {
@@ -22,6 +23,14 @@ export function SettingsPage() {
           ))}
         </Select>
         <p className="mt-1.5 text-sm text-muted-foreground">{t('settings.languageDescription')}</p>
+      </div>
+
+      <div className="mt-6 max-w-xs">
+        <span className="text-sm font-medium">{t('settings.theme')}</span>
+        <div className="mt-1.5">
+          <ThemeToggle />
+        </div>
+        <p className="mt-1.5 text-sm text-muted-foreground">{t('settings.themeDescription')}</p>
       </div>
     </div>
   )

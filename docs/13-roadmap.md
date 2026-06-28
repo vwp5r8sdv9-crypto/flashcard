@@ -22,10 +22,10 @@ Built one module at a time, per the agreed process: each phase is reviewed befor
 
 - Decks: create/edit/delete/list — **done**, against the real Supabase backend, RLS-isolated per user (ADR-0020) ([User Flows](08-user-flows.md) §2, §5).
 - Cards: create/edit/delete/search/sort within a deck — **done**, same Supabase-backed approach via a dedicated `CardsRepository` ([User Flows](08-user-flows.md) §3).
-- `domain/srs`: types prepared (`CardReviewState`, `CardReviewRating`) per ADR-0007's content/scheduling separation; the scheduling algorithm itself is not yet built.
-- Study session: due-card queue (per-deck and the global cross-deck view — both share one query, see [Database Design](07-database-design.md) §Row Level Security), Again/Good/Easy, session summary ([User Flows](08-user-flows.md) §4).
+- `domain/srs`: the scheduling algorithm (`scheduleReview`) is **done** — a simplified three-button SM-2 family algorithm, finalized in ADR-0023, with `card_review_state` rows created automatically via a database trigger.
+- Study session: due-card queue (per-deck and the global cross-deck view, both via `studyApi`), Again/Good/Easy grading with optimistic queue advancement, distinct "no cards yet" vs. "nothing due" empty states, and a session summary — **done** ([User Flows](08-user-flows.md) §4).
 
-**Exit criteria:** [MVP Scope](03-mvp-scope.md)'s "definition of done" items 1–4 are met.
+**Exit criteria:** met. [MVP Scope](03-mvp-scope.md)'s "definition of done" items 1–4 are satisfied.
 
 ## Phase 2 — Import/export, PWA polish
 
