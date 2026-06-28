@@ -51,7 +51,25 @@ export const router = createBrowserRouter([
             path: '/signup',
             lazy: () => import('./SignUpPage').then((m) => ({ Component: m.SignUpPage })),
           },
+          {
+            path: '/forgot-password',
+            lazy: () =>
+              import('./ForgotPasswordPage').then((m) => ({ Component: m.ForgotPasswordPage })),
+          },
         ],
+      },
+      // Deliberately NOT wrapped in RedirectIfAuthenticated: clicking a
+      // valid password-recovery link creates a real session, which that
+      // guard would treat as "already signed in" and bounce to / before
+      // the reset form ever renders. Same reasoning keeps the OAuth
+      // callback unguarded — see AuthCallbackPage and ADR-0022.
+      {
+        path: '/reset-password',
+        lazy: () => import('./ResetPasswordPage').then((m) => ({ Component: m.ResetPasswordPage })),
+      },
+      {
+        path: '/auth/callback',
+        lazy: () => import('./AuthCallbackPage').then((m) => ({ Component: m.AuthCallbackPage })),
       },
     ],
   },

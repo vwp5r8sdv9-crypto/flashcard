@@ -48,5 +48,6 @@ If an ADR and a living `/docs` page ever disagree about what's currently true, *
 | [0019](0019-route-based-code-splitting.md)                           | Route-Based Code Splitting and a Reviewed Chunk-Size Threshold            | Accepted                                                  |
 | [0020](0020-supabase-repository-backend.md)                          | Supabase Becomes the Repository Backend                                   | Accepted                                                  |
 | [0021](0021-real-authentication-flow.md)                             | Real Authentication Replaces the Simulated Sign-In Flow                   | Accepted                                                  |
+| [0022](0022-google-oauth-and-password-recovery.md)                   | Google OAuth Sign-In and Self-Service Password Recovery                   | Accepted                                                  |
 
-ADRs 0001–0014 were accepted together on 2026-06-27, as part of writing the project's foundation before any application code existed (see `/docs/13-roadmap.md` Phase 0). Future decisions — including any reversal of one of these — get their own new ADR, numbered `0022` onward.
+ADRs 0001–0014 were accepted together on 2026-06-27, as part of writing the project's foundation before any application code existed (see `/docs/13-roadmap.md` Phase 0). Future decisions — including any reversal of one of these — get their own new ADR, numbered `0023` onward.

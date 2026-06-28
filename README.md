@@ -54,4 +54,4 @@ See [`.env.example`](.env.example) for local development and ADR-0001 / ADR-0011
 
 ## Status
 
-Early build — see [`docs/13-roadmap.md`](docs/13-roadmap.md) for what's built vs. planned. Real Supabase Auth (sign up, sign in, sign out, session persistence) and RLS-isolated deck/card management run against a real Supabase backend (no more local-only storage), with a sidebar/drawer navigation shell and a fully internationalized UI (English, Portuguese, Russian, German, Japanese). Studying, password reset, and OAuth are not implemented yet.
+Early build — see [`docs/13-roadmap.md`](docs/13-roadmap.md) for what's built vs. planned. Real Supabase Auth (sign up, sign in, sign out, session persistence, Google OAuth, password reset) and RLS-isolated deck/card management run against a real Supabase backend (no more local-only storage), with a sidebar/drawer navigation shell and a fully internationalized UI (English, Portuguese, Russian, German, Japanese). Studying is not implemented yet.

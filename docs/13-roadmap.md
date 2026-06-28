@@ -60,7 +60,7 @@ These are explicitly not scheduled yet — they're listed so they're not forgott
 - **Local-first/offline studying** — see [Synchronization Strategy](11-synchronization.md) §Migration path. Build only if real usage shows offline access is a frequent need, not speculatively.
 - **Rich media cards** (images/audio).
 - **Anki `.apkg` import.**
-- **OAuth/MFA** — see [Authentication Strategy](10-authentication.md) §Deliberately deferred.
+- **MFA / magic-link sign-in** — see [Authentication Strategy](10-authentication.md) §Deliberately deferred.
 
 ## Process reminder
 
