@@ -13,7 +13,7 @@ export function RequireAuth() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-muted-foreground">
+      <div className="flex min-h-svh items-center justify-center text-muted-foreground">
         {t('common.loading')}
       </div>
     )

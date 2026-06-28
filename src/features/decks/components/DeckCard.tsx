@@ -61,7 +61,7 @@ export function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
           />
         </div>
       </div>
-      <h3 className="mt-3 font-medium">{deck.name}</h3>
+      <h3 className="mt-3 font-medium break-words [overflow-wrap:anywhere]">{deck.name}</h3>
       <p className="text-sm text-muted-foreground">
         {language.flag} {t(`languages.${deck.language}`)}
       </p>

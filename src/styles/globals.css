@@ -8,6 +8,7 @@
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
@@ -18,7 +19,14 @@
   --color-success: var(--success);
   --color-success-foreground: var(--success-foreground);
 
-  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Single-layer, warm-tinted shadows (see --shadow below) replace Tailwind's
+     default neutral-black shadow recipe, applied automatically everywhere
+     shadow-sm/md/lg are already used (Card, Dialog, DeckCard hover). */
+  --shadow-sm: 0 2px 8px var(--shadow);
+  --shadow-md: 0 8px 24px var(--shadow);
+  --shadow-lg: 0 16px 36px var(--shadow);
 
   --animate-fade-in: fade-in 200ms ease-out;
   --animate-fade-out: fade-out 150ms ease-in;
@@ -59,38 +67,68 @@
   }
 }
 
+/*
+ * Warm beige/cream palette. --primary/--primary-foreground deliberately
+ * reuse --foreground/--background (a monochrome dark-pill button, not a
+ * separate accent hue) to match the calm, low-chrome look. --destructive
+ * doubles as both standalone error/icon text (needs to stay the saturated
+ * tone for contrast) and a button background (paired with
+ * --destructive-foreground for the text on top of it) — verified both
+ * pairings hold up at a readable contrast ratio in each mode.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #18181b;
-  --muted: #f4f4f5;
-  --muted-foreground: #71717a;
-  --border: #e4e4e7;
-  --primary: #4f46e5;
-  --primary-foreground: #ffffff;
-  --destructive: #dc2626;
-  --destructive-foreground: #ffffff;
+  --background: #f7f2ea;
+  --foreground: #171411;
+  --card: #ffffff;
+  --muted: #f0e8dd;
+  --muted-foreground: #786f66;
+  --border: #eadfce;
+  --primary: var(--foreground);
+  --primary-foreground: var(--background);
+  --destructive: #8c2d2d;
+  --destructive-foreground: #f1dada;
   --success: #047857;
   --success-foreground: #ffffff;
+  --shadow: rgba(35, 25, 12, 0.09);
 }
 
 :root.dark {
-  --background: #18181b;
-  --foreground: #f4f4f5;
-  --muted: #27272a;
-  --muted-foreground: #a1a1aa;
-  --border: #2e2e33;
-  --primary: #818cf8;
-  --primary-foreground: #1e1b4b;
-  --destructive: #f87171;
-  --destructive-foreground: #1f1315;
+  --background: #14110f;
+  --foreground: #f7efe4;
+  --card: #211c18;
+  --muted: #2a231e;
+  --muted-foreground: #b8aa99;
+  --border: #3a3028;
+  --primary: var(--foreground);
+  --primary-foreground: var(--background);
+  --destructive: #ffb4a8;
+  --destructive-foreground: #4a2523;
   --success: #34d399;
   --success-foreground: #022c22;
+  --shadow: rgba(0, 0, 0, 0.35);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
 }
 
 body {
+  width: 100%;
+  min-height: 100svh;
+  overflow-x: hidden;
   background-color: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans);
+  /* Clears the iOS notch / home indicator when launched as a home-screen
+     web app (standalone display mode) — see the manifest in vite.config.ts. */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 @media (prefers-reduced-motion: reduce) {

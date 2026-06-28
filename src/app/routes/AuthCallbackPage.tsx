@@ -40,7 +40,7 @@ export function AuthCallbackPage() {
   const failed = !isLoading && !session
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted p-4">
+    <div className="flex min-h-svh items-center justify-center bg-muted p-4">
       <Card className="w-full max-w-sm">
         <div className="mb-6 flex flex-col items-center gap-3">
           <Logo />

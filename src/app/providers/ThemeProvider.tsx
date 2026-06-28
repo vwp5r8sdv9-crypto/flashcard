@@ -14,6 +14,11 @@ function getSystemTheme(): ResolvedTheme {
 
 function applyTheme(resolved: ResolvedTheme) {
   document.documentElement.classList.toggle('dark', resolved === 'dark')
+  // Keeps the PWA status bar (home-screen launch) matching the resolved
+  // theme — the index.html inline script only covers the very first paint.
+  document
+    .querySelector('meta[name="theme-color"]')
+    ?.setAttribute('content', resolved === 'dark' ? '#14110f' : '#f7f2ea')
 }
 
 /**

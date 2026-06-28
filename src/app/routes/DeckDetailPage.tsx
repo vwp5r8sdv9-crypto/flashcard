@@ -38,7 +38,7 @@ export function DeckDetailPage() {
 
   if (!deck) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-2">
+      <div className="flex min-h-svh flex-col items-center justify-center gap-2">
         <p className="text-muted-foreground">{t('notFound.title')}</p>
         <Link to="/decks" className="text-primary underline">
           {t('decks.backToDecks')}
@@ -55,15 +55,17 @@ export function DeckDetailPage() {
         ← {t('decks.backToDecks')}
       </Link>
       <div className="mt-4 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
+        <div className="flex min-w-0 items-center gap-3">
           <span
-            className="h-4 w-4 rounded-full"
+            className="h-4 w-4 shrink-0 rounded-full"
             style={{ backgroundColor: deck.color }}
             aria-hidden
           />
-          <h1 className="text-2xl font-semibold">{deck.name}</h1>
+          <h1 className="min-w-0 break-words text-2xl font-semibold [overflow-wrap:anywhere]">
+            {deck.name}
+          </h1>
         </div>
-        <Link to={`/decks/${deck.id}/study`}>
+        <Link to={`/decks/${deck.id}/study`} className="shrink-0">
           <Button>{t('study.studyNow')}</Button>
         </Link>
       </div>

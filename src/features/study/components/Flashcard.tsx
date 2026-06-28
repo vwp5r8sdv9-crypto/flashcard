@@ -25,11 +25,15 @@ export function Flashcard({ card, revealed, onReveal }: FlashcardProps) {
           )}
         >
           <Card className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center [backface-visibility:hidden]">
-            <p className="text-2xl font-medium">{card.front}</p>
+            <p className="max-w-full text-2xl font-medium break-words [overflow-wrap:anywhere]">
+              {card.front}
+            </p>
             <SpeakButton text={card.front} lang={card.language} />
           </Card>
           <Card className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center [backface-visibility:hidden] [transform:rotateY(180deg)]">
-            <p className="text-2xl font-medium">{card.back}</p>
+            <p className="max-w-full text-2xl font-medium break-words [overflow-wrap:anywhere]">
+              {card.back}
+            </p>
             <SpeakButton text={card.back} lang={card.language} />
           </Card>
         </div>
