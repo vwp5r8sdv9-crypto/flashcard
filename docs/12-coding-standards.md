@@ -32,7 +32,7 @@ These map directly to [Architecture](04-architecture.md) and [Folder Structure](
 
 ## Testing expectations
 
-- **`src/domain/srs`** requires thorough unit tests — it's the core value proposition of the product (see [Product Vision](01-product-vision.md)) and the easiest layer to test exhaustively since it's pure functions.
+- **`src/domain/study`** requires thorough unit tests — it's the core value proposition of the product (see [Product Vision](01-product-vision.md)) and the easiest layer to test exhaustively since it's pure functions.
 - **Feature components** get tests for their critical interactions (submitting a form, rating a card), not exhaustive coverage of every prop combination.
 - **End-to-end (Playwright)** covers the golden path end to end: sign up → create deck → add card → study session → sign out. New critical flows get an e2e test; minor UI tweaks don't need one.
 - A bug fix that wasn't caught by an existing test gets a regression test alongside the fix.

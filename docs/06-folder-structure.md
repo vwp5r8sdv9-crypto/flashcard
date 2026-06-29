@@ -35,9 +35,9 @@ flashcards/
 │   │   │   ├── api/                # cardsApi.ts
 │   │   │   └── types.ts
 │   │   ├── study/
-│   │   │   ├── components/        # StudySession, ReviewControls, ...
-│   │   │   ├── hooks/             # useStudyQueue, useSubmitReview
-│   │   │   ├── api/                # reviewApi.ts (reads/writes card_review_state, review_logs)
+│   │   │   ├── components/        # StudySession, Flashcard, ...
+│   │   │   ├── hooks/             # useStudyCards, useSubmitRating
+│   │   │   ├── api/                # studyApi.ts (reads/writes card_study_state)
 │   │   │   └── types.ts
 │   │   └── import-export/
 │   │       ├── components/        # ImportWizard, ExportButton, ...
@@ -46,7 +46,7 @@ flashcards/
 │   │       └── types.ts
 │   │
 │   ├── domain/                    # pure business logic — no React, no Supabase imports
-│   │   ├── srs/                   # CardReviewState/rating types now; the scheduling algorithm itself is not built yet
+│   │   ├── study/                 # getNextCard (weighted-random selection) + applyRating — see ADR-0026
 │   │   └── importExport/          # Zod schema for valid import files — shared with the import-deck Edge Function, see docs/09-api-design.md
 │   │
 │   ├── components/                 # shared, generic, feature-agnostic UI (Button, Dialog, Select, ConfirmDialog...)

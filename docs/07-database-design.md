@@ -19,15 +19,14 @@ auth.users (managed by Supabase Auth)
       ▼ N             ▼
    cards          (self-reference, deferred)
       │ 1
-      ├──────────────┐
-      ▼ 1            ▼ N
-card_review_state  review_logs
+      ▼ 1
+card_study_state
 ```
 
 - A user has many decks.
 - A deck has many cards.
-- A card has exactly one review-state record and many historical review-log entries.
-- `cards`, `card_review_state`, and `review_logs` each also carry a **denormalized `user_id`**, in addition to their natural parent reference — see §Row Level Security below for why.
+- A card has exactly one study-state record.
+- `cards` and `card_study_state` each also carry a **denormalized `user_id`**, in addition to their natural parent reference — see §Row Level Security below for why.
 
 ## Tables
 
@@ -78,60 +77,36 @@ Indexes: `cards(deck_id)` (also speeds up the cascade delete when a deck is remo
 **Decision:** `front`/`back`/`notes` are plain `text`, not JSON/rich-text, for the MVP.
 **Why:** Matches the MVP scope (plain-text cards); rich content (images/audio/formatting) is an explicit fast-follow (see [Roadmap](13-roadmap.md)) and would change this to a structured format — deferring it avoids designing for a feature that isn't built yet.
 
-### `card_review_state`
+### `card_study_state`
 
-Holds the _current_ spaced-repetition scheduling state for a card — kept in its own table rather than as columns on `cards`.
+Holds the _current_ study stats for a card — kept in its own table rather than as columns on `cards`. Deliberately not a spaced-repetition schedule: there's no due date, every card is always a candidate to study, just a more-or-less likely one. See ADR-0026 (supersedes ADR-0013/ADR-0023, which committed to and tuned an SM-2 algorithm this table no longer backs).
 
-| Column             | Type                                                | Notes                                                                                         |
-| ------------------ | --------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `card_id`          | `uuid` PK, references `cards(id)` on delete cascade | One-to-one with `cards`.                                                                      |
-| `user_id`          | `uuid`, references `profiles(id)`, not null         | Denormalized — see §Row Level Security.                                                       |
-| `state`            | `text`, not null, default `'new'`                   | Constrained via `check (state in ('new','learning','review','relearning'))` — see note below. |
-| `due_at`           | `timestamptz`, not null, default `now()`            | When the card next becomes eligible for study.                                                |
-| `interval_days`    | `real`, not null, default `0`                       | Current scheduling interval.                                                                  |
-| `ease_factor`      | `real`, not null, default `2.5`                     | SM-2-style ease multiplier.                                                                   |
-| `repetitions`      | `integer`, not null, default `0`                    | Consecutive successful reviews.                                                               |
-| `lapses`           | `integer`, not null, default `0`                    | Times the card was rated "Again" after leaving the `new` state.                               |
-| `last_reviewed_at` | `timestamptz`, nullable                             |                                                                                               |
+| Column            | Type                                                | Notes                                                                                                                                    |
+| ----------------- | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `card_id`         | `uuid` PK, references `cards(id)` on delete cascade | One-to-one with `cards`.                                                                                                                 |
+| `user_id`         | `uuid`, references `profiles(id)`, not null         | Denormalized — see §Row Level Security.                                                                                                  |
+| `weight`          | `integer`, not null, default `5`                    | Constrained via `check (weight between 1 and 8)` — higher means more likely to be picked next; see ADR-0026 for the selection algorithm. |
+| `times_seen`      | `integer`, not null, default `0`                    |                                                                                                                                          |
+| `times_again`     | `integer`, not null, default `0`                    |                                                                                                                                          |
+| `times_good`      | `integer`, not null, default `0`                    |                                                                                                                                          |
+| `times_easy`      | `integer`, not null, default `0`                    |                                                                                                                                          |
+| `last_studied_at` | `timestamptz`, nullable                             |                                                                                                                                          |
 
-Index: **composite `card_review_state(user_id, due_at)`**. The study session's core query — for both a single deck and the cross-deck "study all due" view (see [User Flows](08-user-flows.md) §4) — is "give me this user's cards where `due_at <= now()`." A composite index on `(user_id, due_at)` answers that directly with no join to `cards`/`decks`, and scales as both the user base and per-user card counts grow. (A `due_at`-only index doesn't help here — it can't be used to filter by owner — see §Row Level Security for why `user_id` is denormalized onto this table at all.)
+Index: `card_study_state(user_id)`. Unlike the due-date scheduling table this replaces, the study session's core query is "give me every card this user owns in scope" with no time-range filter at all — the weighted-random pick happens client-side over that full set (see [Architecture](04-architecture.md) and ADR-0026), so a plain owner index is enough.
 
-**Decision:** Scheduling state is a separate table from `cards`, not extra columns on `cards`.
-**Why:** Keeps `cards` purely about _content_ (what import/export cares about) and `card_review_state` purely about _scheduling progress_. This separation means export/import logic doesn't need to special-case scheduling columns, and a future "reset my progress on this deck" feature is a delete on one table, not a selective column reset on another.
-**Note on the algorithm itself:** the exact constants and transition rules (how much `ease_factor` changes on "Again" vs "Easy", how `interval_days` is computed) are an SM-2-family algorithm implemented as a pure function in `src/domain/srs/scheduleReview.ts` (see [Architecture](04-architecture.md)) — finalized in ADR-0023, not decided in this document, since this is a design doc, not an implementation.
+**Decision:** Study state is a separate table from `cards`, not extra columns on `cards`.
+**Why:** Keeps `cards` purely about _content_ (what import/export cares about) and `card_study_state` purely about _study progress_. This separation means export/import logic doesn't need to special-case study columns, and a future "reset my progress on this deck" feature is a delete on one table, not a selective column reset on another.
+**Note on the algorithm itself:** the exact weight deltas and clamp bounds are implemented as pure functions in `src/domain/study/getNextCard.ts` and `src/domain/study/applyRating.ts` (see [Architecture](04-architecture.md)) — finalized in ADR-0026, not decided in this document, since this is a design doc, not an implementation.
 
-**Note on row creation:** every `cards` insert automatically gets a matching `card_review_state` row via a database trigger (`handle_new_card`, mirroring `handle_new_user` above), not application code — see `supabase/migrations/20260628202438_card_review_state_trigger.sql` and ADR-0023.
-**Note on `state`/`rating` as `text` + `check`, not a native Postgres `enum`:** both this column and `review_logs.rating` (below) use `text` with a `check` constraint listing valid values, rather than a Postgres `enum` type. A `check` constraint is altered with an ordinary migration (`alter table ... drop constraint ..., add constraint ...`); native enum types require a separate, more awkward catalog change (`alter type ... add value`). Since this list of states/ratings may plausibly grow (e.g. a future "suspended" state), the more easily extensible option was chosen deliberately.
-
-### `review_logs`
-
-Append-only history of every rating a user has given a card. Not used by the scheduling algorithm itself (which only needs current state), but kept from day one because:
-
-- it's the only way to ever build stats/insights ([Roadmap](13-roadmap.md) Phase 3) without having thrown the data away,
-- it's useful for debugging/tuning the algorithm later,
-- append-only tables carry essentially no design risk to add now vs. later, unlike a column you might need to remove.
-
-| Column            | Type                                                       | Notes                                                        |
-| ----------------- | ---------------------------------------------------------- | ------------------------------------------------------------ |
-| `id`              | `uuid` PK, default `gen_random_uuid()`                     |                                                              |
-| `card_id`         | `uuid`, references `cards(id)` on delete cascade, not null |                                                              |
-| `user_id`         | `uuid`, references `profiles(id)`, not null                | Denormalized — see §Row Level Security.                      |
-| `rating`          | `text`, not null                                           | Constrained via `check (rating in ('again','good','easy'))`. |
-| `reviewed_at`     | `timestamptz`, not null, default `now()`                   |                                                              |
-| `interval_before` | `real`, nullable                                           | Interval prior to this review.                               |
-| `interval_after`  | `real`, nullable                                           | Interval resulting from this review.                         |
-
-Indexes: `review_logs(card_id)` (cascade-delete performance) and `review_logs(user_id, reviewed_at)` (anticipates the Phase 3 stats queries in [Roadmap](13-roadmap.md) — "show my study activity over time" is exactly this access pattern).
-
-**Scalability note:** this table is append-only and has no delete path other than cascading from its card — it grows forever. That's an accepted tradeoff at MVP scale (see [Goals](02-goals.md) §Non-goals — not designing for premature scale). If it ever becomes large enough to matter operationally, the standard fix (time-based partitioning or archiving old rows) is additive and doesn't require changing anything upstream of this table.
+**Note on row creation:** every `cards` insert automatically gets a matching `card_study_state` row via a database trigger (`handle_new_card`, mirroring `handle_new_user` above), not application code — see `supabase/migrations/20260627234219_init_schema.sql` and ADR-0026.
 
 ## Row Level Security
 
 RLS is enabled on every table. Authorization is enforced at the database, not just in application code (see [Architecture](04-architecture.md) §Security model).
 
-**Decision:** `cards`, `card_review_state`, and `review_logs` each carry a denormalized `user_id`, in addition to their natural parent reference (`deck_id` / `card_id`). Every table's RLS policy checks this direct column rather than joining up to `decks` on every query.
-**Why:** The most frequent query in the whole app is "find this user's due cards" (every study session — see [User Flows](08-user-flows.md) §4). Without a direct `user_id` column, that query — and the RLS check evaluated on every row — would need to join `card_review_state → cards → decks` just to know who owns a row. Denormalizing the owner id turns that into a single indexed equality check, and is what makes the composite index above possible. It also makes the global "study every due card across all decks" view (in MVP scope — see [MVP Scope](03-mvp-scope.md)) a plain single-table query instead of a three-table join.
-**Risk this introduces, and how it's handled:** a denormalized column can drift from the truth if something is allowed to write it incorrectly. Two things prevent that here: (1) there is no feature that ever reassigns who owns a card or its review state — these rows are created once by their owner and never transferred, so there's no update path that could cause drift; (2) every table's policy still validates the denormalized `user_id` against its authoritative parent **on write** (in `with check`), so Postgres rejects an insert/update that tries to attach a row to a parent it doesn't actually own — a client cannot insert a card into someone else's deck merely by claiming its own `user_id`. Reads pay only the cheap direct check; writes pay one cheap subquery to guarantee integrity. This is the standard safe pattern for this kind of denormalization: cheap reads, validated writes.
+**Decision:** `cards` and `card_study_state` each carry a denormalized `user_id`, in addition to their natural parent reference (`deck_id` / `card_id`). Every table's RLS policy checks this direct column rather than joining up to `decks` on every query.
+**Why:** The most frequent query in the whole app is "find this user's cards in scope" (every study session — see [User Flows](08-user-flows.md) §4). Without a direct `user_id` column, that query — and the RLS check evaluated on every row — would need to join `card_study_state → cards → decks` just to know who owns a row. Denormalizing the owner id turns that into a single indexed equality check. It also makes the global "study everything across all decks" view (in MVP scope — see [MVP Scope](03-mvp-scope.md)) a plain single-table query instead of a three-table join.
+**Risk this introduces, and how it's handled:** a denormalized column can drift from the truth if something is allowed to write it incorrectly. Two things prevent that here: (1) there is no feature that ever reassigns who owns a card or its study state — these rows are created once by their owner and never transferred, so there's no update path that could cause drift; (2) every table's policy still validates the denormalized `user_id` against its authoritative parent **on write** (in `with check`), so Postgres rejects an insert/update that tries to attach a row to a parent it doesn't actually own — a client cannot insert a card into someone else's deck merely by claiming its own `user_id`. Reads pay only the cheap direct check; writes pay one cheap subquery to guarantee integrity. This is the standard safe pattern for this kind of denormalization: cheap reads, validated writes.
 
 **Implementation detail (added when the migration was written, see ADR-0020):** every `user_id` column is declared `default auth.uid()`, so application code never sets it explicitly on insert — the repository (`decksApi`/`cardsApi`) only ever sends content columns, and the database fills in the owner. This doesn't weaken the integrity check above: `with check` still validates the resulting value against the row's actual parent, it's just that the value being validated is now supplied by a column default instead of a client-sent field.
 
@@ -156,18 +131,10 @@ create policy "cards_owner_rw" on cards
   );
 ```
 
-Policy for `card_review_state` and `review_logs` — identical shape, validated against `cards.user_id`. Because that column is itself already guaranteed correct by the policy above, this only needs to check one level up, not all the way to `decks`:
+Policy for `card_study_state` — validated against `cards.user_id`. Because that column is itself already guaranteed correct by the policy above, this only needs to check one level up, not all the way to `decks`:
 
 ```sql
-create policy "card_review_state_owner_rw" on card_review_state
-  for all
-  using (auth.uid() = user_id)
-  with check (
-    auth.uid() = user_id
-    and user_id = (select user_id from cards where cards.id = card_id)
-  );
-
-create policy "review_logs_owner_rw" on review_logs
+create policy "card_study_state_owner_rw" on card_study_state
   for all
   using (auth.uid() = user_id)
   with check (

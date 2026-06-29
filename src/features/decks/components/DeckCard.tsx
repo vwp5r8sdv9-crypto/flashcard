@@ -6,7 +6,6 @@ import { Card } from '@/components/Card'
 import { IconButton } from '@/components/IconButton'
 import { getLanguageMeta } from '@/lib/languages'
 import { useCardCount } from '@/features/cards/hooks/useCardCount'
-import { useDueCount } from '@/features/study/hooks/useDueCount'
 import type { Deck } from '../types'
 
 interface DeckCardProps {
@@ -28,7 +27,6 @@ export function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { data: cardCount } = useCardCount(deck.id)
-  const { data: dueCount } = useDueCount(deck.id)
   const language = getLanguageMeta(deck.language)
 
   function openStudy() {
@@ -79,8 +77,7 @@ export function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
         {language.flag} {t(`languages.${deck.language}`)}
       </p>
       <p className="mt-3 text-sm text-muted-foreground">
-        {t('decks.cardCount', { count: cardCount ?? 0 })} ·{' '}
-        {t('study.dueCount', { count: dueCount ?? 0 })}
+        {t('decks.cardCount', { count: cardCount ?? 0 })}
       </p>
     </Card>
   )

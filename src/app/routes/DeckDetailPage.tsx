@@ -5,13 +5,11 @@ import { CardList } from '@/features/cards/components/CardList'
 import { getLanguageMeta } from '@/lib/languages'
 import { Button } from '@/components/Button'
 import { Skeleton } from '@/components/Skeleton'
-import { useDueCount } from '@/features/study/hooks/useDueCount'
 
 /** Deck detail screen: deck header, a Study entry point, and the full Cards CRUD list. */
 export function DeckDetailPage() {
   const { deckId } = useParams<{ deckId: string }>()
   const { data: deck, isLoading } = useDeck(deckId)
-  const { data: dueCount } = useDueCount(deckId)
   const { t } = useTranslation()
 
   if (isLoading) {
@@ -71,9 +69,6 @@ export function DeckDetailPage() {
       </div>
       <p className="mt-1 text-muted-foreground">
         {language.flag} {t(`languages.${deck.language}`)}
-      </p>
-      <p className="mt-1 text-sm text-muted-foreground">
-        {t('study.dueCount', { count: dueCount ?? 0 })}
       </p>
 
       <div className="mt-8">

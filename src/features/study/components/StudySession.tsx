@@ -4,56 +4,69 @@ import { Link } from 'react-router-dom'
 import { Button } from '@/components/Button'
 import { Skeleton } from '@/components/Skeleton'
 import { CardFormDialog } from '@/features/cards/components/CardFormDialog'
-import { useCardCount } from '@/features/cards/hooks/useCardCount'
-import { useTotalCardCount } from '@/features/cards/hooks/useTotalCardCount'
-import type { CardReviewRating } from '@/domain/srs/types'
+import { applyRating } from '@/domain/study/applyRating'
+import { getNextCard } from '@/domain/study/getNextCard'
+import type { StudyRating } from '@/domain/study/types'
 import type { LanguageCode } from '@/lib/languages'
-import { useDueCards } from '../hooks/useDueCards'
-import { useNextDueAt } from '../hooks/useNextDueAt'
-import { useSubmitReview } from '../hooks/useSubmitReview'
+import { useStudyCards } from '../hooks/useStudyCards'
+import { useSubmitRating } from '../hooks/useSubmitRating'
+import type { StudyCard } from '../types'
 import { Flashcard } from './Flashcard'
-import { StudySummary } from './StudySummary'
 
 interface StudySessionProps {
-  /** Omitted for the global "study all due" session. */
+  /** Omitted for the global "study everything" session. */
   deckId?: string
   /** The deck's study language — only needed alongside deckId, to power the empty state's inline "add first card" dialog. */
   language?: LanguageCode
 }
 
-const EMPTY_TALLY: Record<CardReviewRating, number> = { again: 0, good: 0, easy: 0 }
-
+/**
+ * A continuous session: cards never run out, there's no "due" concept, and
+ * rating a card never removes it from the pool — it just updates that
+ * card's weight for next time. See ADR-0026. Card selection itself lives in
+ * domain/study/getNextCard — this component only orchestrates state.
+ */
 export function StudySession({ deckId, language }: StudySessionProps) {
-  const { t, i18n } = useTranslation()
-  const { data: dueCards, isLoading } = useDueCards(deckId)
-  const { data: deckCardCount } = useCardCount(deckId)
-  const { data: totalCardCount } = useTotalCardCount()
-  const submitReview = useSubmitReview()
+  const { t } = useTranslation()
+  const { data: cards, isLoading } = useStudyCards(deckId)
+  const submitRating = useSubmitRating()
 
   const [revealed, setRevealed] = useState(false)
-  const [tally, setTally] = useState(EMPTY_TALLY)
+  const [history, setHistory] = useState<string[]>([])
+  const [currentCard, setCurrentCard] = useState<StudyCard | null>(null)
   const [isAddCardOpen, setIsAddCardOpen] = useState(false)
+  const [cardsSnapshot, setCardsSnapshot] = useState(cards)
 
-  const currentCard = dueCards?.[0]
-  const queueIsEmpty = !isLoading && (dueCards?.length ?? 0) === 0
-  const studiedCount = tally.again + tally.good + tally.easy
-  const scopeTotal = deckId ? deckCardCount : totalCardCount
-  const hasNoCardsAtAll = queueIsEmpty && studiedCount === 0 && (scopeTotal ?? 0) === 0
-
-  const { data: nextDueAt } = useNextDueAt(
-    deckId,
-    queueIsEmpty && studiedCount === 0 && !hasNoCardsAtAll,
-  )
+  // Picks an initial card once the pool loads, following React's documented
+  // pattern for adjusting state in response to changed data during render
+  // rather than in an effect (https://react.dev/learn/you-might-not-need-an-effect).
+  // Guarded by `!currentCard` so a later background refetch never yanks the
+  // card the user is currently looking at out from under them.
+  if (cards !== cardsSnapshot) {
+    setCardsSnapshot(cards)
+    if (cards && cards.length > 0 && !currentCard) {
+      setCurrentCard(getNextCard(cards, history))
+    }
+  }
 
   function reveal() {
     setRevealed(true)
   }
 
-  function rate(rating: CardReviewRating) {
-    if (!currentCard) return
-    setTally((prev) => ({ ...prev, [rating]: prev[rating] + 1 }))
+  function rate(rating: StudyRating) {
+    if (!currentCard || !cards) return
+    const next = applyRating(currentCard.studyState, rating, new Date())
+    submitRating.mutate({ next, deckId })
+
+    // Computed locally (not read back from the query cache) so the next
+    // card is chosen instantly, without waiting on a render/refetch cycle.
+    const updatedCards = cards.map((card) =>
+      card.id === currentCard.id ? { ...card, studyState: next } : card,
+    )
+    const newHistory = [...history, currentCard.id]
+    setHistory(newHistory)
     setRevealed(false)
-    submitReview.mutate({ card: currentCard, rating, deckId })
+    setCurrentCard(getNextCard(updatedCards, newHistory))
   }
 
   useEffect(() => {
@@ -104,51 +117,27 @@ export function StudySession({ deckId, language }: StudySessionProps) {
     )
   }
 
-  if (studiedCount > 0) {
-    return <StudySummary tally={tally} deckId={deckId} />
-  }
-
-  if (hasNoCardsAtAll) {
-    if (deckId && language) {
-      return (
-        <div className="text-center text-muted-foreground">
-          <p className="text-base">{t('study.noCardsYet')}</p>
-          <Button onClick={() => setIsAddCardOpen(true)} className="mt-5">
-            {t('study.addFirstCard')}
-          </Button>
-          <CardFormDialog
-            open={isAddCardOpen}
-            onOpenChange={setIsAddCardOpen}
-            deckId={deckId}
-            language={language}
-          />
-        </div>
-      )
-    }
+  // No cards anywhere in scope.
+  if (deckId && language) {
     return (
       <div className="text-center text-muted-foreground">
         <p className="text-base">{t('study.noCardsYet')}</p>
-        <Link to="/decks" className="mt-4 inline-block underline">
-          {t('study.backToDecks')}
-        </Link>
+        <Button onClick={() => setIsAddCardOpen(true)} className="mt-5">
+          {t('study.addFirstCard')}
+        </Button>
+        <CardFormDialog
+          open={isAddCardOpen}
+          onOpenChange={setIsAddCardOpen}
+          deckId={deckId}
+          language={language}
+        />
       </div>
     )
   }
-
   return (
     <div className="text-center text-muted-foreground">
-      <p className="text-base">{t('study.nothingDue')}</p>
-      {nextDueAt && (
-        <p className="mt-1 text-sm">
-          {t('study.nextDueAt', {
-            date: new Intl.DateTimeFormat(i18n.language, {
-              dateStyle: 'medium',
-              timeStyle: 'short',
-            }).format(new Date(nextDueAt)),
-          })}
-        </p>
-      )}
-      <Link to={deckId ? `/decks/${deckId}` : '/decks'} className="mt-4 inline-block underline">
+      <p className="text-base">{t('study.noCardsYet')}</p>
+      <Link to="/decks" className="mt-4 inline-block underline">
         {t('study.backToDecks')}
       </Link>
     </div>

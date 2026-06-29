@@ -1,6 +1,6 @@
 # 0013. Spaced Repetition Algorithm: Simplified SM-2 Family, Three-Button Rating
 
-**Status:** Accepted
+**Status:** Superseded by [ADR-0026](0026-weighted-random-study-algorithm.md)
 **Date:** 2026-06-27
 **Related:** docs/07-database-design.md §card_review_state, docs/04-architecture.md §Domain layer, ADR-0004, ADR-0007
 

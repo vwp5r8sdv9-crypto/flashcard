@@ -93,7 +93,7 @@ create policy "decks_owner_rw" on public.decks
 -- cards
 -- ---------------------------------------------------------------------------
 -- Content only (front/back + optional pronunciation/notes/example) — never
--- scheduling state, which lives in card_review_state. See ADR-0007.
+-- study state, which lives in card_study_state. See ADR-0007.
 
 create table public.cards (
   id uuid primary key default gen_random_uuid(),
@@ -136,33 +136,30 @@ create policy "cards_owner_rw" on public.cards
   );
 
 -- ---------------------------------------------------------------------------
--- card_review_state
+-- card_study_state
 -- ---------------------------------------------------------------------------
--- Current spaced-repetition scheduling state, one-to-one with cards. Created
--- here per docs/07-database-design.md so the schema is complete ahead of the
--- study feature — no application code reads/writes this table yet (ADR-0013,
--- docs/13-roadmap.md Phase 1: the algorithm itself is not built).
+-- Per-card study stats driving the weighted-random card picker in
+-- src/domain/study — one-to-one with cards. Deliberately not a spaced-
+-- repetition schedule (no due date): every card is always a candidate, just
+-- a more-or-less likely one. See ADR-0026 (supersedes ADR-0013/ADR-0023,
+-- which committed to and tuned an SM-2 algorithm this table no longer backs).
 
-create table public.card_review_state (
+create table public.card_study_state (
   card_id uuid primary key references public.cards (id) on delete cascade,
   user_id uuid not null default auth.uid() references public.profiles (id) on delete cascade,
-  state text not null default 'new' check (state in ('new', 'learning', 'review', 'relearning')),
-  due_at timestamptz not null default now(),
-  interval_days real not null default 0,
-  ease_factor real not null default 2.5,
-  repetitions integer not null default 0,
-  lapses integer not null default 0,
-  last_reviewed_at timestamptz
+  weight integer not null default 5 check (weight between 1 and 8),
+  times_seen integer not null default 0,
+  times_again integer not null default 0,
+  times_good integer not null default 0,
+  times_easy integer not null default 0,
+  last_studied_at timestamptz
 );
 
--- Composite, not due_at alone: the due-card query is always scoped to "this
--- user's due cards" (per-deck or the cross-deck view), never "due cards"
--- globally — see docs/07-database-design.md and ADR-0008.
-create index card_review_state_user_due_idx on public.card_review_state (user_id, due_at);
+create index card_study_state_user_id_idx on public.card_study_state (user_id);
 
-alter table public.card_review_state enable row level security;
+alter table public.card_study_state enable row level security;
 
-create policy "card_review_state_owner_rw" on public.card_review_state
+create policy "card_study_state_owner_rw" on public.card_study_state
   for all
   using (auth.uid() = user_id)
   with check (
@@ -170,30 +167,20 @@ create policy "card_review_state_owner_rw" on public.card_review_state
     and user_id = (select user_id from public.cards where cards.id = card_id)
   );
 
--- ---------------------------------------------------------------------------
--- review_logs
--- ---------------------------------------------------------------------------
--- Append-only review history. Same "not used yet" note as card_review_state.
+-- A card_study_state row is created automatically on every cards insert,
+-- mirroring the handle_new_user trigger above — application code never
+-- creates this row directly, so it can never drift out of sync with cards.
+create function public.handle_new_card()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  insert into public.card_study_state (card_id, user_id) values (new.id, new.user_id);
+  return new;
+end;
+$$;
 
-create table public.review_logs (
-  id uuid primary key default gen_random_uuid(),
-  card_id uuid not null references public.cards (id) on delete cascade,
-  user_id uuid not null default auth.uid() references public.profiles (id) on delete cascade,
-  rating text not null check (rating in ('again', 'good', 'easy')),
-  reviewed_at timestamptz not null default now(),
-  interval_before real,
-  interval_after real
-);
-
-create index review_logs_card_id_idx on public.review_logs (card_id);
-create index review_logs_user_reviewed_idx on public.review_logs (user_id, reviewed_at);
-
-alter table public.review_logs enable row level security;
-
-create policy "review_logs_owner_rw" on public.review_logs
-  for all
-  using (auth.uid() = user_id)
-  with check (
-    auth.uid() = user_id
-    and user_id = (select user_id from public.cards where cards.id = card_id)
-  );
+create trigger on_card_created
+  after insert on public.cards
+  for each row execute function public.handle_new_card();

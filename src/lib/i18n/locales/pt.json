@@ -131,25 +131,16 @@
   },
   "study": {
     "title": "Estudar",
-    "allDueDescription": "Todas as cartas pendentes de todos os seus baralhos, em uma única fila.",
+    "allDescription": "Todas as cartas de todos os seus baralhos, misturadas em uma sessão tranquila.",
     "showAnswer": "Mostrar resposta",
     "again": "De novo",
     "good": "Bom",
     "easy": "Fácil",
-    "nothingDue": "Nada pendente no momento.",
-    "nextDueAt": "Próxima carta pendente em {{date}}.",
     "noCardsYet": "Adicione algumas cartas primeiro — ainda não há nada para estudar aqui.",
     "addFirstCard": "Adicionar primeira carta",
     "backToDecks": "Voltar para seus baralhos",
-    "sessionComplete": "Sessão concluída!",
-    "cardsStudied_one": "{{count}} carta estudada",
-    "cardsStudied_other": "{{count}} cartas estudadas",
-    "dueCount_one": "{{count}} carta pendente",
-    "dueCount_other": "{{count}} cartas pendentes",
-    "dueToday": "Pendentes hoje",
     "studyNow": "Estudar",
-    "studyAllDue_one": "Estudar {{count}} carta pendente",
-    "studyAllDue_other": "Estudar {{count}} cartas pendentes"
+    "studyAll": "Estudar todos os baralhos"
   },
   "settings": {
     "title": "Configurações",

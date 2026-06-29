@@ -59,10 +59,10 @@ One module per business feature (`decks`, `cards`, `study`, `auth`, `import-expo
 
 ### Domain layer
 
-Pure, framework-agnostic TypeScript: the spaced-repetition scheduling algorithm, deck/card validation rules, anything that's a business rule rather than a UI or storage concern.
+Pure, framework-agnostic TypeScript: the study card-selection algorithm, deck/card validation rules, anything that's a business rule rather than a UI or storage concern.
 
-**Decision:** The spaced-repetition algorithm is isolated in `src/domain/srs`, with zero imports from React or Supabase.
-**Why:** This is the single most important piece of business logic in the product (see [Product Vision](01-product-vision.md)) — it deserves to be unit-tested in isolation, and it needs to be portable to a future native mobile client without rewriting it. Burying scheduling math inside a React component or a database trigger would make it hard to test and impossible to reuse.
+**Decision:** The study algorithm is isolated in `src/domain/study`, with zero imports from React or Supabase.
+**Why:** This is the single most important piece of business logic in the product (see [Product Vision](01-product-vision.md)) — it deserves to be unit-tested in isolation, and it needs to be portable to a future native mobile client without rewriting it. Burying selection logic inside a React component or a database trigger would make it hard to test and impossible to reuse. It's also what keeps the algorithm itself swappable (weighted-random today, possibly FSRS/SM-2/Leitner later — see ADR-0026) without rebuilding the UI around it.
 **Tradeoff:** A small amount of indirection (a pure function being called from a hook) compared to inlining the logic — worth it for testability alone.
 
 ### Data-access layer

@@ -102,69 +102,36 @@ export interface Database {
         }
         Relationships: []
       }
-      card_review_state: {
+      card_study_state: {
         Row: {
           card_id: string
           user_id: string
-          state: string
-          due_at: string
-          interval_days: number
-          ease_factor: number
-          repetitions: number
-          lapses: number
-          last_reviewed_at: string | null
+          weight: number
+          times_seen: number
+          times_again: number
+          times_good: number
+          times_easy: number
+          last_studied_at: string | null
         }
         Insert: {
           card_id: string
           user_id?: string
-          state?: string
-          due_at?: string
-          interval_days?: number
-          ease_factor?: number
-          repetitions?: number
-          lapses?: number
-          last_reviewed_at?: string | null
+          weight?: number
+          times_seen?: number
+          times_again?: number
+          times_good?: number
+          times_easy?: number
+          last_studied_at?: string | null
         }
         Update: {
           card_id?: string
           user_id?: string
-          state?: string
-          due_at?: string
-          interval_days?: number
-          ease_factor?: number
-          repetitions?: number
-          lapses?: number
-          last_reviewed_at?: string | null
-        }
-        Relationships: []
-      }
-      review_logs: {
-        Row: {
-          id: string
-          card_id: string
-          user_id: string
-          rating: string
-          reviewed_at: string
-          interval_before: number | null
-          interval_after: number | null
-        }
-        Insert: {
-          id?: string
-          card_id: string
-          user_id?: string
-          rating: string
-          reviewed_at?: string
-          interval_before?: number | null
-          interval_after?: number | null
-        }
-        Update: {
-          id?: string
-          card_id?: string
-          user_id?: string
-          rating?: string
-          reviewed_at?: string
-          interval_before?: number | null
-          interval_after?: number | null
+          weight?: number
+          times_seen?: number
+          times_again?: number
+          times_good?: number
+          times_easy?: number
+          last_studied_at?: string | null
         }
         Relationships: []
       }

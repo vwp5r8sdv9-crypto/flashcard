@@ -11,8 +11,8 @@ export function useCreateCard() {
       // Broad rather than scoped to this deck, so the Home dashboard's
       // countAll query is covered too — harmless at this app's scale.
       void queryClient.invalidateQueries({ queryKey: ['cards'] })
-      // A new card is due immediately (see the card_review_state trigger),
-      // so the study queues/badges need refreshing too.
+      // A new card needs a study-state row too (see the card_study_state
+      // trigger), so any cached study pool needs refreshing.
       void queryClient.invalidateQueries({ queryKey: ['study'] })
     },
   })

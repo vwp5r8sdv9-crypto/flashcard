@@ -5,21 +5,19 @@ import { Button } from '@/components/Button'
 import { Skeleton } from '@/components/Skeleton'
 import { useDecks } from '@/features/decks/hooks/useDecks'
 import { useTotalCardCount } from '@/features/cards/hooks/useTotalCardCount'
-import { useDueCount } from '@/features/study/hooks/useDueCount'
 
 /** Light dashboard — aggregate stats only, computed from already-available data. */
 export function HomePage() {
   const { t } = useTranslation()
   const { data: decks, isLoading: isDecksLoading } = useDecks()
   const { data: totalCards, isLoading: isTotalCardsLoading } = useTotalCardCount()
-  const { data: dueCount, isLoading: isDueCountLoading } = useDueCount()
 
   return (
     <div className="mx-auto max-w-3xl p-6">
       <h1 className="text-2xl font-semibold">{t('home.welcomeBack')}</h1>
       <p className="mt-1 text-muted-foreground">{t('home.overview')}</p>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-3">
+      <div className="mt-6 grid gap-4 sm:grid-cols-2">
         <Card>
           <p className="text-sm text-muted-foreground">{t('nav.decks')}</p>
           {isDecksLoading ? (
@@ -38,14 +36,6 @@ export function HomePage() {
             <p className="mt-1 text-2xl font-semibold">
               {t('home.totalCards', { count: totalCards ?? 0 })}
             </p>
-          )}
-        </Card>
-        <Card>
-          <p className="text-sm text-muted-foreground">{t('study.dueToday')}</p>
-          {isDueCountLoading ? (
-            <Skeleton className="mt-2 h-8 w-16" />
-          ) : (
-            <p className="mt-1 text-2xl font-semibold">{dueCount ?? 0}</p>
           )}
         </Card>
       </div>

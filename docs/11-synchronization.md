@@ -42,7 +42,7 @@ If offline studying becomes a validated, real user need (not hypothetical), here
 1. Introduce a local store (IndexedDB, or SQLite via a WASM build) as a cache/queue in front of Supabase.
 2. Reads serve from local data first, with background refresh from the server.
 3. Writes go to the local store immediately (optimistic) and queue for upload; the queue retries on reconnect.
-4. Conflict resolution needs real design at that point — likely per-field last-write-wins for deck/card _content_, but something more careful for `card_review_state` (two devices both reviewing the same card offline is the one scenario where naive last-write-wins could silently lose a review).
-5. Because the [Architecture](04-architecture.md)'s data-access layer is already the _only_ place Supabase is called from, this change is largely contained to that layer plus a new local-storage layer underneath it — the UI, feature hooks, and domain SRS logic would not need to change.
+4. Conflict resolution needs real design at that point — likely per-field last-write-wins for deck/card _content_, but something more careful for `card_study_state` (two devices both studying the same card offline is the one scenario where naive last-write-wins could silently lose a rating).
+5. Because the [Architecture](04-architecture.md)'s data-access layer is already the _only_ place Supabase is called from, this change is largely contained to that layer plus a new local-storage layer underneath it — the UI, feature hooks, and domain study logic would not need to change.
 
 This isn't built now. It's documented so that "online-first today" reads as a deliberate, revisitable choice rather than a wall.

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/Button'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
-import { useDueCount } from '@/features/study/hooks/useDueCount'
 import { useDecks } from '../hooks/useDecks'
 import { useDeleteDeck } from '../hooks/useDeleteDeck'
 import { DeckCard } from './DeckCard'
@@ -13,7 +12,6 @@ import type { Deck } from '../types'
 export function DeckList() {
   const { t } = useTranslation()
   const { data: decks, isLoading } = useDecks()
-  const { data: dueCount } = useDueCount()
   const deleteDeck = useDeleteDeck()
 
   const [isFormOpen, setIsFormOpen] = useState(false)
@@ -35,9 +33,9 @@ export function DeckList() {
       <div className="mb-8 flex items-center justify-between gap-3">
         <h1 className="text-display-1">{t('decks.title')}</h1>
         <div className="flex items-center gap-3">
-          {Boolean(dueCount) && (
+          {Boolean(decks?.length) && (
             <Link to="/study" className="text-sm text-primary underline">
-              {t('study.studyAllDue', { count: dueCount })}
+              {t('study.studyAll')}
             </Link>
           )}
           <Button onClick={openCreateForm}>{t('decks.newDeck')}</Button>

@@ -131,25 +131,16 @@
   },
   "study": {
     "title": "Lernen",
-    "allDueDescription": "Alle fälligen Karten aus all Ihren Decks, in einer gemeinsamen Warteschlange.",
+    "allDescription": "Alle Karten aus all deinen Decks, gemischt in einer entspannten Lerneinheit.",
     "showAnswer": "Antwort anzeigen",
     "again": "Nochmal",
     "good": "Gut",
     "easy": "Leicht",
-    "nothingDue": "Aktuell nichts fällig.",
-    "nextDueAt": "Nächste Karte fällig {{date}}.",
     "noCardsYet": "Fügen Sie zuerst Karten hinzu — hier gibt es noch nichts zu lernen.",
     "addFirstCard": "Erste Karte hinzufügen",
     "backToDecks": "Zurück zu deinen Decks",
-    "sessionComplete": "Lerneinheit abgeschlossen!",
-    "cardsStudied_one": "{{count}} Karte gelernt",
-    "cardsStudied_other": "{{count}} Karten gelernt",
-    "dueCount_one": "{{count}} Karte fällig",
-    "dueCount_other": "{{count}} Karten fällig",
-    "dueToday": "Heute fällig",
     "studyNow": "Lernen",
-    "studyAllDue_one": "{{count}} fällige Karte lernen",
-    "studyAllDue_other": "{{count}} fällige Karten lernen"
+    "studyAll": "Alle Decks lernen"
   },
   "settings": {
     "title": "Einstellungen",

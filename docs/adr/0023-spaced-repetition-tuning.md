@@ -1,6 +1,6 @@
 # 0023. Spaced Repetition Tuning: Constants, Transition Table, and Review-State Row Lifecycle
 
-**Status:** Accepted
+**Status:** Superseded by [ADR-0026](0026-weighted-random-study-algorithm.md)
 **Date:** 2026-06-28
 **Related:** docs/07-database-design.md §card_review_state, docs/04-architecture.md §Domain layer, ADR-0013, ADR-0007, ADR-0008
 

@@ -22,25 +22,27 @@ These walk through the core journeys end to end, grounded in the [MVP Scope](03-
 **Add:**
 
 1. Inside a deck, "add card" → form with front, back, notes (optional).
-2. Submit → card appears in the deck's card list, in `new` review state (immediately due).
+2. Submit → card appears in the deck's card list, with a default `card_study_state` row (weight `5`) ready to be picked up by a study session immediately.
 3. Form stays open (or reopens empty) so a user can rapid-fire add many cards — this is the highest-frequency action in the app and should have the least friction.
 
-**Edit:** tap a card in the list → same form, pre-filled → save updates it in place. Editing content does not reset scheduling progress (`card_review_state` is untouched).
+**Edit:** tap a card in the list → same form, pre-filled → save updates it in place. Editing content does not reset study progress (`card_study_state` is untouched).
 
-**Delete:** delete action on a card, with a confirmation step (irreversible) → removes the card and cascades to its `card_review_state`/`review_logs`.
+**Delete:** delete action on a card, with a confirmation step (irreversible) → removes the card and cascades to its `card_study_state`.
 
 ## 4. Study session
 
-1. From "your decks," each deck shows a due-card count, and a global "study all due cards" entry point sits alongside the deck list itself (a single combined queue across every deck — both are in MVP scope, see [MVP Scope](03-mvp-scope.md) §Studying). User taps either "study" on a specific deck, or the global entry point.
-2. The app loads the queue: cards where `due_at <= now()` for that deck, or — for the global entry point — for the signed-in user with no deck filter at all. Both are the same repository call with an optional `deckId` parameter; see [Database Design](07-database-design.md) §`card_review_state` for the index that keeps this fast either way.
-3. **Empty due state:** "nothing due right now" with the next due time shown, if there are cards but none are due yet; a distinct "add some cards first" state if the deck has zero cards.
-4. For each card in the queue:
-   - Front is shown.
-   - User reveals the back (tap/click or keyboard shortcut).
+A calm, continuous session — no due dates, no progress bar, no statistics while studying, and it never ends on its own; the user studies until they leave. See ADR-0026.
+
+1. From "your decks," tapping a deck opens straight into studying it; a global "study all decks" entry point sits alongside the deck list for a single combined session across every deck (both are in MVP scope, see [MVP Scope](03-mvp-scope.md) §Studying).
+2. The app loads every card in scope — that deck, or every deck the signed-in user owns for the global entry point — plus each card's `card_study_state`. Both are the same repository call with an optional `deckId` parameter; see [Database Design](07-database-design.md) §`card_study_state`.
+3. **Empty state:** a calm "add some cards first" message with an "add first card" action that opens the card form right there, if the deck has zero cards. (There's no "nothing due" state in this version — every card is always a candidate; see ADR-0026.)
+4. For each card:
+   - Front is shown, large and centered.
+   - User reveals the back by tapping the card, pressing "Show answer," or a keyboard shortcut.
+   - Pronunciation/example/notes are shown on the back if the card has them.
    - User rates **Again / Good / Easy**.
-   - The rating is sent to the `study` feature, which calls the domain SRS function to compute the new schedule, writes the updated `card_review_state`, and appends a `review_logs` row (see [Database Design](07-database-design.md)).
-   - Next card shown immediately — no waiting on a round trip to block the UI (optimistic update via TanStack Query).
-5. When the queue is empty, a short session summary is shown: total cards studied, breakdown by rating.
+   - The rating is sent to the `study` feature, which calls `domain/study`'s `applyRating` to compute the card's new weight/counters and writes the updated `card_study_state` (see [Database Design](07-database-design.md)).
+   - The next card is chosen immediately by `getNextCard` (weighted-random, recency-avoiding) and shown with no waiting on a round trip (optimistic update via TanStack Query) — the rated card stays in the pool, just with an adjusted weight, rather than being removed.
 
 ## 5. Edit / delete a deck
 
@@ -62,11 +64,11 @@ These walk through the core journeys end to end, grounded in the [MVP Scope](03-
 ## 8. Multi-device continuity
 
 1. User signs in on a second device with the same account.
-2. "Your decks" shows the same decks and due counts immediately — this is a direct read from the same cloud database, not a distinct "sync" step. See [Synchronization Strategy](11-synchronization.md) for exactly what is and isn't guaranteed here (notably: this requires connectivity, since the MVP is online-first).
+2. "Your decks" shows the same decks immediately — this is a direct read from the same cloud database, not a distinct "sync" step. See [Synchronization Strategy](11-synchronization.md) for exactly what is and isn't guaranteed here (notably: this requires connectivity, since the MVP is online-first).
 
 ## Key states to design for in every flow
 
 - **Loading** (initial fetch) — skeleton/spinner, not a blank screen.
-- **Empty** (no decks / no cards / nothing due) — each has a distinct, actionable message rather than a generic "no data."
+- **Empty** (no decks / no cards) — each has a distinct, actionable message rather than a generic "no data."
 - **Error** (network failure, validation failure) — visible, specific, and recoverable (retry where it makes sense).
 - **Offline** (no connection) — per [Synchronization Strategy](11-synchronization.md), the MVP surfaces a clear "you're offline" state rather than silently failing.

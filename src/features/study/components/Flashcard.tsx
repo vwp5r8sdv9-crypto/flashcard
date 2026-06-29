@@ -3,10 +3,10 @@ import { Card } from '@/components/Card'
 import { Button } from '@/components/Button'
 import { SpeakButton } from '@/components/SpeakButton'
 import { cn } from '@/lib/utils'
-import type { DueCard } from '../types'
+import type { StudyCard } from '../types'
 
 interface FlashcardProps {
-  card: DueCard
+  card: StudyCard
   revealed: boolean
   onReveal: () => void
 }
@@ -19,8 +19,17 @@ export function Flashcard({ card, revealed, onReveal }: FlashcardProps) {
     <div>
       <div className="[perspective:1200px]">
         <div
+          role="button"
+          tabIndex={0}
+          onClick={onReveal}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault()
+              onReveal()
+            }
+          }}
           className={cn(
-            'relative h-72 w-full transition-transform duration-300 [transform-style:preserve-3d]',
+            'relative h-72 w-full cursor-pointer transition-transform duration-300 [transform-style:preserve-3d]',
             revealed && '[transform:rotateY(180deg)]',
           )}
         >
@@ -28,13 +37,32 @@ export function Flashcard({ card, revealed, onReveal }: FlashcardProps) {
             <p className="text-display-2 max-w-full break-words [overflow-wrap:anywhere]">
               {card.front}
             </p>
-            <SpeakButton text={card.front} lang={card.language} />
+            <div onClick={(event) => event.stopPropagation()}>
+              <SpeakButton text={card.front} lang={card.language} />
+            </div>
           </Card>
-          <Card className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 text-center [backface-visibility:hidden] [transform:rotateY(180deg)]">
+          <Card className="absolute inset-0 flex flex-col items-center justify-center gap-3 overflow-y-auto p-8 text-center [backface-visibility:hidden] [transform:rotateY(180deg)]">
             <p className="text-display-2 max-w-full break-words [overflow-wrap:anywhere]">
               {card.back}
             </p>
-            <SpeakButton text={card.back} lang={card.language} />
+            {card.pronunciation && (
+              <p className="max-w-full break-words text-sm text-muted-foreground [overflow-wrap:anywhere]">
+                {card.pronunciation}
+              </p>
+            )}
+            {card.exampleSentence && (
+              <p className="max-w-full break-words text-base text-muted-foreground italic [overflow-wrap:anywhere]">
+                {card.exampleSentence}
+              </p>
+            )}
+            {card.notes && (
+              <p className="max-w-full break-words text-sm text-muted-foreground [overflow-wrap:anywhere]">
+                {card.notes}
+              </p>
+            )}
+            <div onClick={(event) => event.stopPropagation()}>
+              <SpeakButton text={card.back} lang={card.language} />
+            </div>
           </Card>
         </div>
       </div>
