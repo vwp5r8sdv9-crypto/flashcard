@@ -114,7 +114,12 @@
     "cardCount_other": "{{count}} карточки",
     "lastStudied": "Последнее повторение",
     "backToDecks": "Ваши колоды",
-    "manageCards": "Управление карточками"
+    "manageCards": "Управление карточками",
+    "tabs": {
+      "study": "Учить",
+      "cards": "Карточки",
+      "add": "Добавить"
+    }
   },
   "cards": {
     "title": "Карточки",
@@ -133,7 +138,10 @@
     "createCard": "Создать карточку",
     "saveChanges": "Сохранить изменения",
     "deleteConfirmTitle": "Удалить эту карточку?",
-    "deleteConfirmDescription": "Это действие нельзя отменить."
+    "deleteConfirmDescription": "Это действие нельзя отменить.",
+    "sortNewest": "Сначала новые",
+    "sortOldest": "Сначала старые",
+    "sortAlpha": "А → Я"
   },
   "study": {
     "title": "Повторение",

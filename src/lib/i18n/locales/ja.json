@@ -105,7 +105,12 @@
     "cardCount_other": "{{count}} 枚のカード",
     "lastStudied": "最終学習日",
     "backToDecks": "あなたのデッキ",
-    "manageCards": "カードを管理"
+    "manageCards": "カードを管理",
+    "tabs": {
+      "study": "学習",
+      "cards": "カード",
+      "add": "追加"
+    }
   },
   "cards": {
     "title": "カード",
@@ -124,7 +129,10 @@
     "createCard": "カードを作成",
     "saveChanges": "変更を保存",
     "deleteConfirmTitle": "このカードを削除しますか？",
-    "deleteConfirmDescription": "この操作は取り消せません。"
+    "deleteConfirmDescription": "この操作は取り消せません。",
+    "sortNewest": "新しい順",
+    "sortOldest": "古い順",
+    "sortAlpha": "A → Z"
   },
   "study": {
     "title": "学習",

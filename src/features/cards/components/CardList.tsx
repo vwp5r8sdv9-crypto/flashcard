@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/Button'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
 import { Skeleton } from '@/components/Skeleton'
+import { cn } from '@/lib/utils'
 import type { LanguageCode } from '@/lib/languages'
 import { useCards } from '../hooks/useCards'
 import { useDeleteCard } from '../hooks/useDeleteCard'
@@ -11,9 +12,10 @@ import { CardFormDialog } from './CardFormDialog'
 import { CardListItem } from './CardListItem'
 import type { Card } from '../types'
 
+type SortOrder = 'alpha' | 'newest' | 'oldest'
+
 interface CardListProps {
   deckId: string
-  /** The deck's study language — used so alphabetical sort follows its collation rules. */
   language: LanguageCode
 }
 
@@ -23,6 +25,7 @@ export function CardList({ deckId, language }: CardListProps) {
   const deleteCard = useDeleteCard()
 
   const [search, setSearch] = useState('')
+  const [sortOrder, setSortOrder] = useState<SortOrder>('newest')
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingCard, setEditingCard] = useState<Card | null>(null)
   const [deletingCard, setDeletingCard] = useState<Card | null>(null)
@@ -36,8 +39,15 @@ export function CardList({ deckId, language }: CardListProps) {
             card.front.toLowerCase().includes(query) || card.back.toLowerCase().includes(query),
         )
       : cards
-    return [...filtered].sort((a, b) => a.front.localeCompare(b.front, language))
-  }, [cards, search, language])
+
+    return [...filtered].sort((a, b) => {
+      if (sortOrder === 'newest')
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      if (sortOrder === 'oldest')
+        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      return a.front.localeCompare(b.front, language)
+    })
+  }, [cards, search, language, sortOrder])
 
   function openCreateForm() {
     setEditingCard(null)
@@ -49,24 +59,54 @@ export function CardList({ deckId, language }: CardListProps) {
     setIsFormOpen(true)
   }
 
+  const sortOptions: { id: SortOrder; label: string }[] = [
+    { id: 'newest', label: t('cards.sortNewest') },
+    { id: 'oldest', label: t('cards.sortOldest') },
+    { id: 'alpha', label: t('cards.sortAlpha') },
+  ]
+
   return (
     <div>
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-lg font-semibold">{t('cards.title')}</h2>
-        <div className="flex items-center gap-2">
-          <div className="relative">
-            <Search
-              className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-              aria-hidden
-            />
-            <input
-              type="search"
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder={t('cards.searchPlaceholder')}
-              aria-label={t('cards.searchPlaceholder')}
-              className="h-9 w-48 rounded-md border border-border bg-background pl-8 pr-3 text-sm outline-none focus:ring-2 focus:ring-primary sm:w-64"
-            />
+      {/* Toolbar */}
+      <div className="mb-4 flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
+        {/* Search */}
+        <div className="relative flex-1">
+          <Search
+            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+            aria-hidden
+          />
+          <input
+            type="search"
+            value={search}
+            onChange={(event) => {
+              setSearch(event.target.value)
+            }}
+            placeholder={t('cards.searchPlaceholder')}
+            aria-label={t('cards.searchPlaceholder')}
+            className="h-10 w-full rounded-2xl border border-border bg-card-soft pl-9 pr-3 text-sm outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+
+        {/* Sort + Add */}
+        <div className="flex shrink-0 items-center gap-2">
+          <div className="flex rounded-full bg-muted p-0.5">
+            {sortOptions.map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => {
+                  setSortOrder(opt.id)
+                }}
+                className={cn(
+                  'rounded-full px-3 py-1 text-xs font-medium transition-all',
+                  sortOrder === opt.id
+                    ? 'bg-card text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground',
+                )}
+              >
+                {opt.label}
+              </button>
+            ))}
           </div>
           <Button onClick={openCreateForm}>{t('cards.newCard')}</Button>
         </div>
@@ -100,8 +140,12 @@ export function CardList({ deckId, language }: CardListProps) {
               key={card.id}
               card={card}
               language={language}
-              onEdit={() => openEditForm(card)}
-              onDelete={() => setDeletingCard(card)}
+              onEdit={() => {
+                openEditForm(card)
+              }}
+              onDelete={() => {
+                setDeletingCard(card)
+              }}
             />
           ))}
         </div>

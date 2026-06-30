@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/Button'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
@@ -32,14 +31,7 @@ export function DeckList() {
     <div>
       <div className="mb-8 flex items-center justify-between gap-3">
         <h1 className="text-display-1">{t('decks.title')}</h1>
-        <div className="flex items-center gap-3">
-          {Boolean(decks?.length) && (
-            <Link to="/study" className="text-sm text-primary underline">
-              {t('study.studyAll')}
-            </Link>
-          )}
-          <Button onClick={openCreateForm}>{t('decks.newDeck')}</Button>
-        </div>
+        <Button onClick={openCreateForm}>{t('decks.newDeck')}</Button>
       </div>
 
       {isLoading && <p className="text-muted-foreground">{t('common.loading')}</p>}

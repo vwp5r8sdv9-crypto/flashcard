@@ -108,7 +108,12 @@
     "cardCount_other": "{{count}} cartas",
     "lastStudied": "Último estudo",
     "backToDecks": "Seus baralhos",
-    "manageCards": "Gerenciar cartas"
+    "manageCards": "Gerenciar cartas",
+    "tabs": {
+      "study": "Estudar",
+      "cards": "Cartas",
+      "add": "Adicionar"
+    }
   },
   "cards": {
     "title": "Cartas",
@@ -127,7 +132,10 @@
     "createCard": "Criar carta",
     "saveChanges": "Salvar alterações",
     "deleteConfirmTitle": "Excluir esta carta?",
-    "deleteConfirmDescription": "Essa ação não pode ser desfeita."
+    "deleteConfirmDescription": "Essa ação não pode ser desfeita.",
+    "sortNewest": "Mais recentes",
+    "sortOldest": "Mais antigas",
+    "sortAlpha": "A → Z"
   },
   "study": {
     "title": "Estudar",

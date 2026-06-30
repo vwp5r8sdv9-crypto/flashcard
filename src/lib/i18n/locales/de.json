@@ -108,7 +108,12 @@
     "cardCount_other": "{{count}} Karten",
     "lastStudied": "Zuletzt gelernt",
     "backToDecks": "Deine Decks",
-    "manageCards": "Karten verwalten"
+    "manageCards": "Karten verwalten",
+    "tabs": {
+      "study": "Lernen",
+      "cards": "Karten",
+      "add": "Hinzufügen"
+    }
   },
   "cards": {
     "title": "Karten",
@@ -127,7 +132,10 @@
     "createCard": "Karte erstellen",
     "saveChanges": "Änderungen speichern",
     "deleteConfirmTitle": "Diese Karte löschen?",
-    "deleteConfirmDescription": "Dies kann nicht rückgängig gemacht werden."
+    "deleteConfirmDescription": "Dies kann nicht rückgängig gemacht werden.",
+    "sortNewest": "Neueste",
+    "sortOldest": "Älteste",
+    "sortAlpha": "A → Z"
   },
   "study": {
     "title": "Lernen",

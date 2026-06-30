@@ -108,7 +108,12 @@
     "cardCount_other": "{{count}} cards",
     "lastStudied": "Last studied",
     "backToDecks": "Your decks",
-    "manageCards": "Manage cards"
+    "manageCards": "Manage cards",
+    "tabs": {
+      "study": "Study",
+      "cards": "Cards",
+      "add": "Add"
+    }
   },
   "cards": {
     "title": "Cards",
@@ -127,7 +132,10 @@
     "createCard": "Create card",
     "saveChanges": "Save changes",
     "deleteConfirmTitle": "Delete this card?",
-    "deleteConfirmDescription": "This can't be undone."
+    "deleteConfirmDescription": "This can't be undone.",
+    "sortNewest": "Newest",
+    "sortOldest": "Oldest",
+    "sortAlpha": "A → Z"
   },
   "study": {
     "title": "Study",

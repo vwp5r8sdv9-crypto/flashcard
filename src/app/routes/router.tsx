@@ -20,21 +20,17 @@ export const router = createBrowserRouter([
         children: [
           {
             path: '/',
-            // Jumps straight into whichever deck's study screen was last
-            // opened (see DeckStudyPage), so returning users land on their
-            // flashcards instead of a dashboard. Falls through to the
-            // dashboard (HomePage) when there's no recorded deck yet — a
-            // stale id (e.g. the deck was since deleted) is handled by
-            // DeckStudyPage's own "not found" state, not validated here.
+            // Jumps straight into whichever deck's workspace was last opened,
+            // so returning users land directly in their study session.
+            // Falls through to the dashboard (HomePage) on first use.
             loader: () => {
               const lastDeckId = getLastOpenedDeckId()
-              return lastDeckId ? redirect(`/decks/${lastDeckId}/study`) : null
+              return lastDeckId ? redirect(`/decks/${lastDeckId}`) : null
             },
             lazy: () => import('./HomePage').then((m) => ({ Component: m.HomePage })),
           },
           {
-            // Always shows the dashboard, regardless of the smart redirect
-            // above — the sidebar's "Home" link points here, not at `/`.
+            // Always shows the dashboard — the sidebar's "Home" link points here.
             path: '/home',
             lazy: () => import('./HomePage').then((m) => ({ Component: m.HomePage })),
           },
@@ -43,16 +39,22 @@ export const router = createBrowserRouter([
             lazy: () => import('./DecksPage').then((m) => ({ Component: m.DecksPage })),
           },
           {
+            // Unified deck workspace: Study / Cards / Add Card tabs.
             path: '/decks/:deckId',
-            lazy: () => import('./DeckDetailPage').then((m) => ({ Component: m.DeckDetailPage })),
+            lazy: () =>
+              import('./DeckWorkspacePage').then((m) => ({ Component: m.DeckWorkspacePage })),
           },
           {
+            // Legacy deep-link — redirect to the workspace (defaults to Study tab).
             path: '/decks/:deckId/study',
-            lazy: () => import('./DeckStudyPage').then((m) => ({ Component: m.DeckStudyPage })),
+            loader: ({ params }) => redirect(`/decks/${params.deckId ?? ''}`),
           },
           {
+            // Global cross-language study is intentionally removed. See product
+            // decision: mixing unrelated languages into one session is poor UX.
+            // Future: "Study all [language]" scoped sessions replace this.
             path: '/study',
-            lazy: () => import('./StudyPage').then((m) => ({ Component: m.StudyPage })),
+            loader: () => redirect('/decks'),
           },
           {
             path: '/settings',

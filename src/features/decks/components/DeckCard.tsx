@@ -30,7 +30,7 @@ export function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
   const language = getLanguageMeta(deck.language)
 
   function openStudy() {
-    void navigate(`/decks/${deck.id}/study`)
+    void navigate(`/decks/${deck.id}`)
   }
 
   return (

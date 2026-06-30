@@ -50,7 +50,7 @@ export function DeckStudyPage() {
         </Link>
       </div>
       <div className="mt-8">
-        <StudySession deckId={deck.id} language={deck.language} />
+        <StudySession deckId={deck.id} />
       </div>
     </div>
   )
