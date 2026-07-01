@@ -67,7 +67,7 @@ export function DeckWorkspacePage() {
               style={{ backgroundColor: deck.color }}
               aria-hidden
             />
-            <h1 className="min-w-0 flex-1 truncate text-base font-semibold">{deck.name}</h1>
+            <h1 className="min-w-0 flex-1 truncate text-base font-medium">{deck.name}</h1>
             <span
               className="shrink-0 text-base"
               aria-label={t(`languages.${deck.language}`)}
@@ -92,12 +92,9 @@ export function DeckWorkspacePage() {
               className={cn(
                 'flex-1 rounded-full py-1.5 text-sm font-medium transition-all',
                 activeTab === tab.id
-                  ? 'bg-card shadow-sm'
+                  ? 'bg-card text-foreground shadow-sm'
                   : 'text-muted-foreground hover:text-foreground',
               )}
-              // Active tab text uses the deck color — Apple-style accent on
-              // the selection indicator only, not on the background.
-              style={activeTab === tab.id && deck ? { color: deck.color } : undefined}
             >
               {tab.label}
             </button>

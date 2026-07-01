@@ -87,7 +87,7 @@ export function StudySession({ deckId, onAddCard }: StudySessionProps) {
   if (isLoading) {
     return (
       <div className="flex h-full flex-col justify-between p-5">
-        <div className="w-full max-w-lg mx-auto" style={{ height: 'clamp(220px, 45dvh, 320px)' }}>
+        <div className="w-full max-w-lg mx-auto" style={{ height: 'clamp(240px, 50dvh, 380px)' }}>
           <Skeleton className="h-full rounded-[28px]" />
         </div>
         <Skeleton className="h-11 w-full max-w-lg mx-auto rounded-2xl" />
@@ -115,7 +115,7 @@ export function StudySession({ deckId, onAddCard }: StudySessionProps) {
     return (
       <div className="flex h-full flex-col justify-between p-5">
         {/* Card — capped height so it stays readable on any phone */}
-        <div className="w-full max-w-lg mx-auto" style={{ height: 'clamp(220px, 45dvh, 320px)' }}>
+        <div className="w-full max-w-lg mx-auto" style={{ height: 'clamp(240px, 50dvh, 380px)' }}>
           <Flashcard card={currentCard} revealed={revealed} onReveal={reveal} />
         </div>
 
