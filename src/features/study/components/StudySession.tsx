@@ -25,16 +25,19 @@ interface StudySessionProps {
  */
 export function StudySession({ deckId, onAddCard }: StudySessionProps) {
   const { t } = useTranslation()
-  const { data: cards, isLoading } = useStudyCards(deckId)
+  const { data: cards, isLoading, isError, refetch } = useStudyCards(deckId)
   const submitRating = useSubmitRating()
 
   const [revealed, setRevealed] = useState(false)
   const [history, setHistory] = useState<string[]>([])
   const [currentCard, setCurrentCard] = useState<StudyCard | null>(null)
-  const [cardsSnapshot, setCardsSnapshot] = useState(cards)
+  // Initialized to undefined (NOT to `cards`) — the original bug was
+  // `useState(cards)` which on remount starts cardsSnapshot at the same cached
+  // reference, making `cards !== cardsSnapshot` permanently false so
+  // setCurrentCard never fires.
+  const [cardsSnapshot, setCardsSnapshot] = useState<StudyCard[] | undefined>(undefined)
 
-  // Picks an initial card once the pool loads — React's documented "adjust
-  // state during render" pattern avoids firing this in an effect.
+  // React "adjust state during render" — fires synchronously, no effect needed.
   if (cards !== cardsSnapshot) {
     setCardsSnapshot(cards)
     if (cards && cards.length > 0 && !currentCard) {
@@ -83,18 +86,36 @@ export function StudySession({ deckId, onAddCard }: StudySessionProps) {
 
   if (isLoading) {
     return (
-      <div className="flex h-full flex-col gap-4 p-5">
-        <Skeleton className="flex-1 rounded-[28px]" />
-        <Skeleton className="h-11 w-full rounded-2xl" />
+      <div className="flex h-full flex-col justify-between p-5">
+        <div className="w-full max-w-lg mx-auto" style={{ height: 'clamp(220px, 45dvh, 320px)' }}>
+          <Skeleton className="h-full rounded-[28px]" />
+        </div>
+        <Skeleton className="h-11 w-full max-w-lg mx-auto rounded-2xl" />
+      </div>
+    )
+  }
+
+  if (isError) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-4 px-5 text-center">
+        <p className="text-muted-foreground">{t('study.loadError')}</p>
+        <Button
+          variant="secondary"
+          onClick={() => {
+            void refetch()
+          }}
+        >
+          {t('study.tryAgain')}
+        </Button>
       </div>
     )
   }
 
   if (currentCard) {
     return (
-      <div className="flex h-full flex-col gap-4 p-5">
-        {/* Card fills the available space */}
-        <div className="min-h-0 flex-1 max-w-lg w-full mx-auto">
+      <div className="flex h-full flex-col justify-between p-5">
+        {/* Card — capped height so it stays readable on any phone */}
+        <div className="w-full max-w-lg mx-auto" style={{ height: 'clamp(220px, 45dvh, 320px)' }}>
           <Flashcard card={currentCard} revealed={revealed} onReveal={reveal} />
         </div>
 
@@ -137,7 +158,7 @@ export function StudySession({ deckId, onAddCard }: StudySessionProps) {
     )
   }
 
-  // Empty state — deck-scoped (language is only used downstream; not needed for this guard)
+  // Empty state — deck-scoped
   if (deckId) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-5 px-5 text-center">

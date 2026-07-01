@@ -134,7 +134,7 @@ test.describe('authenticated', () => {
     await expect(page.getByRole('dialog')).not.toBeVisible()
   })
 
-  test('adding a card switches to Cards tab afterwards', async ({ page }) => {
+  test('adding a card stays on Add tab with inline confirmation', async ({ page }) => {
     await page.goto(`${BASE_URL}/decks`)
     await page.locator('[role="button"]').first().click()
     await page.getByRole('button', { name: /^add$/i }).click()
@@ -142,10 +142,14 @@ test.describe('authenticated', () => {
     await page.getByLabel(/^front/i).fill(`test-front-${timestamp}`)
     await page.getByLabel(/^back/i).fill(`test-back-${timestamp}`)
     await page.getByRole('button', { name: /create card/i }).click()
-    await expect(page.getByRole('button', { name: /^cards$/i })).toHaveClass(/bg-card/, {
+    // Stays on Add tab (active tab pill has bg-card)
+    await expect(page.getByRole('button', { name: /^add$/i })).toHaveClass(/bg-card/, {
       timeout: 5_000,
     })
-    await expect(page.getByText(`test-front-${timestamp}`)).toBeVisible()
+    // Shows "Card added" confirmation
+    await expect(page.getByText(/card added/i)).toBeVisible({ timeout: 3_000 })
+    // Form is cleared so the user can add the next card
+    await expect(page.getByLabel(/^front/i)).toHaveValue('')
   })
 
   test('search filters cards correctly', async ({ page }) => {

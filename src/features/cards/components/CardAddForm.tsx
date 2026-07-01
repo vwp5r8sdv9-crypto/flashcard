@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -12,8 +12,6 @@ import { useCreateCard } from '../hooks/useCreateCard'
 interface CardAddFormProps {
   deckId: string
   language: LanguageCode
-  /** Called after a card is successfully created — used to switch back to the Cards tab. */
-  onAdded: () => void
 }
 
 interface FormValues {
@@ -24,9 +22,10 @@ interface FormValues {
   notes?: string
 }
 
-export function CardAddForm({ deckId, language, onAdded }: CardAddFormProps) {
+export function CardAddForm({ deckId, language }: CardAddFormProps) {
   const { t } = useTranslation()
   const createCard = useCreateCard()
+  const [showSuccess, setShowSuccess] = useState(false)
 
   const schema = useMemo(
     () =>
@@ -77,7 +76,10 @@ export function CardAddForm({ deckId, language, onAdded }: CardAddFormProps) {
       {
         onSuccess: () => {
           reset()
-          onAdded()
+          setShowSuccess(true)
+          setTimeout(() => {
+            setShowSuccess(false)
+          }, 2500)
         },
       },
     )
@@ -85,6 +87,12 @@ export function CardAddForm({ deckId, language, onAdded }: CardAddFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 pt-2" noValidate>
+      {showSuccess && (
+        <p className="rounded-2xl bg-muted px-4 py-2.5 text-sm font-medium text-foreground">
+          {t('cards.addedConfirmation')}
+        </p>
+      )}
+
       <div className="flex items-end gap-2">
         <div className="flex-1">
           <TextField

@@ -135,7 +135,8 @@
     "deleteConfirmDescription": "Dies kann nicht rückgängig gemacht werden.",
     "sortNewest": "Neueste",
     "sortOldest": "Älteste",
-    "sortAlpha": "A → Z"
+    "sortAlpha": "A → Z",
+    "addedConfirmation": "Karte hinzugefügt"
   },
   "study": {
     "title": "Lernen",
@@ -148,7 +149,9 @@
     "addFirstCard": "Erste Karte hinzufügen",
     "backToDecks": "Zurück zu deinen Decks",
     "studyNow": "Lernen",
-    "studyAll": "Alle Decks lernen"
+    "studyAll": "Alle Decks lernen",
+    "loadError": "Karten konnten nicht geladen werden. Überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+    "tryAgain": "Erneut versuchen"
   },
   "settings": {
     "title": "Einstellungen",

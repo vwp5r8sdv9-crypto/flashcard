@@ -12,6 +12,8 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      devOptions: { enabled: false },
+      workbox: { cleanupOutdatedCaches: true },
       manifest: {
         name: 'Flashcards',
         short_name: 'Flashcards',
@@ -46,5 +48,6 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
+    exclude: ['**/node_modules/**', 'tests/e2e/**'],
   },
 })

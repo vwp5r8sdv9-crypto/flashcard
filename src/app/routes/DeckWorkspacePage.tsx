@@ -131,16 +131,8 @@ export function DeckWorkspacePage() {
       )}
 
       {activeTab === 'add' && (
-        <div className="flex-1 overflow-y-auto px-4 pb-8">
-          {deck && (
-            <CardAddForm
-              deckId={deck.id}
-              language={deck.language}
-              onAdded={() => {
-                setActiveTab('cards')
-              }}
-            />
-          )}
+        <div className="flex-1 overflow-y-auto px-4 pb-24">
+          {deck && <CardAddForm deckId={deck.id} language={deck.language} />}
         </div>
       )}
     </div>

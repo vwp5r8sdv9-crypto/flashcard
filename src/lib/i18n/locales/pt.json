@@ -135,7 +135,8 @@
     "deleteConfirmDescription": "Essa ação não pode ser desfeita.",
     "sortNewest": "Mais recentes",
     "sortOldest": "Mais antigas",
-    "sortAlpha": "A → Z"
+    "sortAlpha": "A → Z",
+    "addedConfirmation": "Carta adicionada"
   },
   "study": {
     "title": "Estudar",
@@ -148,7 +149,9 @@
     "addFirstCard": "Adicionar primeira carta",
     "backToDecks": "Voltar para seus baralhos",
     "studyNow": "Estudar",
-    "studyAll": "Estudar todos os baralhos"
+    "studyAll": "Estudar todos os baralhos",
+    "loadError": "Não foi possível carregar as cartas. Verifique sua conexão e tente novamente.",
+    "tryAgain": "Tentar novamente"
   },
   "settings": {
     "title": "Configurações",

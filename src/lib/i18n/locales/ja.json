@@ -132,7 +132,8 @@
     "deleteConfirmDescription": "この操作は取り消せません。",
     "sortNewest": "新しい順",
     "sortOldest": "古い順",
-    "sortAlpha": "A → Z"
+    "sortAlpha": "A → Z",
+    "addedConfirmation": "カードを追加しました"
   },
   "study": {
     "title": "学習",
@@ -145,7 +146,9 @@
     "addFirstCard": "最初のカードを追加",
     "backToDecks": "デッキ一覧に戻る",
     "studyNow": "学習する",
-    "studyAll": "すべてのデッキを学習する"
+    "studyAll": "すべてのデッキを学習する",
+    "loadError": "カードを読み込めませんでした。接続を確認してもう一度お試しください。",
+    "tryAgain": "もう一度試す"
   },
   "settings": {
     "title": "設定",

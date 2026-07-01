@@ -83,7 +83,7 @@ export function CardList({ deckId, language }: CardListProps) {
             }}
             placeholder={t('cards.searchPlaceholder')}
             aria-label={t('cards.searchPlaceholder')}
-            className="h-10 w-full rounded-2xl border border-border bg-card-soft pl-9 pr-3 text-sm outline-none focus:ring-2 focus:ring-primary"
+            className="h-10 w-full rounded-2xl border border-border bg-card-soft pl-9 pr-3 text-base outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
 

@@ -135,7 +135,8 @@
     "deleteConfirmDescription": "This can't be undone.",
     "sortNewest": "Newest",
     "sortOldest": "Oldest",
-    "sortAlpha": "A → Z"
+    "sortAlpha": "A → Z",
+    "addedConfirmation": "Card added"
   },
   "study": {
     "title": "Study",
@@ -148,7 +149,9 @@
     "addFirstCard": "Add first card",
     "backToDecks": "Back to your decks",
     "studyNow": "Study",
-    "studyAll": "Study all decks"
+    "studyAll": "Study all decks",
+    "loadError": "Couldn't load cards. Check your connection and try again.",
+    "tryAgain": "Try again"
   },
   "settings": {
     "title": "Settings",
