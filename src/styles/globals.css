@@ -46,6 +46,7 @@
   --animate-dialog-in: dialog-in 200ms ease-out;
   --animate-dialog-out: dialog-out 150ms ease-in;
   --animate-page-fade-in: page-fade-in 200ms ease-out;
+  --animate-drawer-in-right: drawer-slide-in-right 260ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @keyframes fade-in {
@@ -80,6 +81,12 @@
 @keyframes page-fade-in {
   from {
     opacity: 0;
+  }
+}
+
+@keyframes drawer-slide-in-right {
+  from {
+    transform: translateX(100%);
   }
 }
 

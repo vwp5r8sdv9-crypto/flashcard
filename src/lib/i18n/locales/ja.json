@@ -133,7 +133,13 @@
     "sortNewest": "新しい順",
     "sortOldest": "古い順",
     "sortAlpha": "A → Z",
-    "addedConfirmation": "カードを追加しました"
+    "addedConfirmation": "カードを追加しました",
+    "exportCards": "カードをエクスポート",
+    "importCards": "カードをインポート",
+    "importSuccess_one": "{{count}}枚のカードをインポートしました",
+    "importSuccess_other": "{{count}}枚のカードをインポートしました",
+    "importInvalidFile": "このファイルを読み込めませんでした。有効なJSONエクスポートであることをご確認ください。",
+    "importAllDuplicates": "すべてのカードはすでにこのデッキに存在します — インポートされませんでした。"
   },
   "study": {
     "title": "学習",

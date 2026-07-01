@@ -136,7 +136,13 @@
     "sortNewest": "Neueste",
     "sortOldest": "Älteste",
     "sortAlpha": "A → Z",
-    "addedConfirmation": "Karte hinzugefügt"
+    "addedConfirmation": "Karte hinzugefügt",
+    "exportCards": "Karten exportieren",
+    "importCards": "Karten importieren",
+    "importSuccess_one": "{{count}} Karte importiert",
+    "importSuccess_other": "{{count}} Karten importiert",
+    "importInvalidFile": "Diese Datei konnte nicht gelesen werden. Bitte stellen Sie sicher, dass es sich um einen gültigen JSON-Export handelt.",
+    "importAllDuplicates": "Alle Karten sind bereits in diesem Deck — nichts importiert."
   },
   "study": {
     "title": "Lernen",

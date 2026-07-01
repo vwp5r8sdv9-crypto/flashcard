@@ -142,7 +142,13 @@
     "sortNewest": "Сначала новые",
     "sortOldest": "Сначала старые",
     "sortAlpha": "А → Я",
-    "addedConfirmation": "Карточка добавлена"
+    "addedConfirmation": "Карточка добавлена",
+    "exportCards": "Экспорт карточек",
+    "importCards": "Импорт карточек",
+    "importSuccess_one": "Импортирована {{count}} карточка",
+    "importSuccess_other": "Импортировано {{count}} карточек",
+    "importInvalidFile": "Не удалось прочитать файл. Убедитесь, что это корректный JSON-экспорт.",
+    "importAllDuplicates": "Все карточки уже есть в этой колоде — ничего не импортировано."
   },
   "study": {
     "title": "Повторение",

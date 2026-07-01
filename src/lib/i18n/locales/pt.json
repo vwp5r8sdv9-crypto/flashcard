@@ -136,7 +136,13 @@
     "sortNewest": "Mais recentes",
     "sortOldest": "Mais antigas",
     "sortAlpha": "A → Z",
-    "addedConfirmation": "Carta adicionada"
+    "addedConfirmation": "Carta adicionada",
+    "exportCards": "Exportar cartas",
+    "importCards": "Importar cartas",
+    "importSuccess_one": "{{count}} carta importada",
+    "importSuccess_other": "{{count}} cartas importadas",
+    "importInvalidFile": "Não foi possível ler este arquivo. Certifique-se de que é um JSON exportado válido.",
+    "importAllDuplicates": "Todas as cartas já existem neste baralho — nada importado."
   },
   "study": {
     "title": "Estudar",

@@ -136,7 +136,13 @@
     "sortNewest": "Newest",
     "sortOldest": "Oldest",
     "sortAlpha": "A → Z",
-    "addedConfirmation": "Card added"
+    "addedConfirmation": "Card added",
+    "exportCards": "Export cards",
+    "importCards": "Import cards",
+    "importSuccess_one": "Imported {{count}} card",
+    "importSuccess_other": "Imported {{count}} cards",
+    "importInvalidFile": "Couldn't read this file. Make sure it's a valid JSON export.",
+    "importAllDuplicates": "All cards already exist in this deck — nothing imported."
   },
   "study": {
     "title": "Study",

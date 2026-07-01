@@ -1,13 +1,16 @@
-import { useMemo, useState } from 'react'
-import { Search } from 'lucide-react'
+import { useRef, useMemo, useState } from 'react'
+import { Download, Search, Upload } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/Button'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
+import { IconButton } from '@/components/IconButton'
 import { Skeleton } from '@/components/Skeleton'
 import { cn } from '@/lib/utils'
 import type { LanguageCode } from '@/lib/languages'
 import { useCards } from '../hooks/useCards'
+import { useCreateCard } from '../hooks/useCreateCard'
 import { useDeleteCard } from '../hooks/useDeleteCard'
+import { downloadJson, exportDeckToJson, deduplicateImport, parseDeckImport } from '../utils/deckIO'
 import { CardFormDialog } from './CardFormDialog'
 import { CardListItem } from './CardListItem'
 import type { Card } from '../types'
@@ -17,18 +20,22 @@ type SortOrder = 'alpha' | 'newest' | 'oldest'
 interface CardListProps {
   deckId: string
   language: LanguageCode
+  deckName?: string
 }
 
-export function CardList({ deckId, language }: CardListProps) {
+export function CardList({ deckId, language, deckName }: CardListProps) {
   const { t } = useTranslation()
   const { data: cards, isLoading } = useCards(deckId)
   const deleteCard = useDeleteCard()
+  const createCard = useCreateCard()
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [search, setSearch] = useState('')
   const [sortOrder, setSortOrder] = useState<SortOrder>('newest')
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingCard, setEditingCard] = useState<Card | null>(null)
   const [deletingCard, setDeletingCard] = useState<Card | null>(null)
+  const [importMessage, setImportMessage] = useState<string | null>(null)
 
   const visibleCards = useMemo(() => {
     if (!cards) return []
@@ -59,6 +66,71 @@ export function CardList({ deckId, language }: CardListProps) {
     setIsFormOpen(true)
   }
 
+  function handleExport() {
+    if (!cards || cards.length === 0) return
+    const json = exportDeckToJson(cards)
+    const slug = (deckName ?? deckId.slice(0, 8)).replace(/\s+/g, '-').toLowerCase()
+    downloadJson(json, `flashcards-${slug}.json`)
+  }
+
+  function handleImportFile(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const text = e.target?.result
+      if (typeof text !== 'string') return
+
+      const parsed = parseDeckImport(text)
+      if (!parsed || parsed.length === 0) {
+        setImportMessage(t('cards.importInvalidFile'))
+        setTimeout(() => {
+          setImportMessage(null)
+        }, 3_000)
+        return
+      }
+
+      const toImport = deduplicateImport(parsed, cards ?? [])
+      if (toImport.length === 0) {
+        setImportMessage(t('cards.importAllDuplicates'))
+        setTimeout(() => {
+          setImportMessage(null)
+        }, 3_000)
+        return
+      }
+
+      const total = toImport.length
+      let successCount = 0
+      let doneCount = 0
+
+      function onDone() {
+        doneCount++
+        if (doneCount === total) {
+          setImportMessage(t('cards.importSuccess', { count: successCount }))
+          setTimeout(() => {
+            setImportMessage(null)
+          }, 3_000)
+        }
+      }
+
+      toImport.forEach((card) => {
+        createCard.mutate(
+          { deckId, ...card },
+          {
+            onSuccess: () => {
+              successCount++
+              onDone()
+            },
+            onError: onDone,
+          },
+        )
+      })
+    }
+    reader.readAsText(file)
+    event.target.value = ''
+  }
+
   const sortOptions: { id: SortOrder; label: string }[] = [
     { id: 'newest', label: t('cards.sortNewest') },
     { id: 'oldest', label: t('cards.sortOldest') },
@@ -87,7 +159,7 @@ export function CardList({ deckId, language }: CardListProps) {
           />
         </div>
 
-        {/* Sort + Add */}
+        {/* Sort + IO + Add */}
         <div className="flex shrink-0 items-center gap-2">
           <div className="flex rounded-full bg-muted p-0.5">
             {sortOptions.map((opt) => (
@@ -108,9 +180,40 @@ export function CardList({ deckId, language }: CardListProps) {
               </button>
             ))}
           </div>
+
+          <IconButton
+            icon={Download}
+            label={t('cards.exportCards')}
+            onClick={handleExport}
+            className="text-muted-foreground"
+            disabled={!cards || cards.length === 0}
+          />
+          <IconButton
+            icon={Upload}
+            label={t('cards.importCards')}
+            onClick={() => {
+              fileInputRef.current?.click()
+            }}
+            className="text-muted-foreground"
+          />
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json"
+            className="hidden"
+            onChange={handleImportFile}
+          />
+
           <Button onClick={openCreateForm}>{t('cards.newCard')}</Button>
         </div>
       </div>
+
+      {/* Import feedback */}
+      {importMessage && (
+        <p className="mb-3 rounded-2xl bg-muted px-4 py-2.5 text-sm font-medium text-foreground">
+          {importMessage}
+        </p>
+      )}
 
       {isLoading && (
         <div className="flex flex-col divide-y divide-border rounded-[28px] border border-border">

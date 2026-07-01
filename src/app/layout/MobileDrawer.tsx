@@ -12,10 +12,9 @@ interface MobileDrawerProps {
 }
 
 /**
- * Left-anchored slide-in drawer for mobile navigation. Built directly on
- * Radix's Dialog primitives rather than the shared `Dialog` component,
- * since that one is shaped for centered content dialogs, not a full-height
- * side panel — Radix still gives focus trap / ESC / overlay-click for free.
+ * Right-anchored slide-in drawer for mobile navigation. Anchored on the same
+ * side as the menu button in MobileNav. Built on Radix Dialog primitives for
+ * focus trap / ESC / overlay-click without the overhead of a custom modal.
  */
 export function MobileDrawer({ open, onOpenChange }: MobileDrawerProps) {
   const { t } = useTranslation()
@@ -23,8 +22,8 @@ export function MobileDrawer({ open, onOpenChange }: MobileDrawerProps) {
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/50 lg:hidden" />
-        <DialogPrimitive.Content className="fixed inset-y-0 left-0 z-50 flex w-64 flex-col gap-6 bg-background p-4 shadow-lg focus:outline-none lg:hidden">
+        <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/40 lg:hidden" />
+        <DialogPrimitive.Content className="animate-drawer-in-right fixed inset-y-0 right-0 z-50 flex w-64 flex-col gap-6 bg-background p-4 shadow-[-2px_0_24px_rgba(0,0,0,0.12)] focus:outline-none lg:hidden">
           <DialogPrimitive.Title className="sr-only">{t('nav.openMenu')}</DialogPrimitive.Title>
           <div className="flex items-center justify-between">
             <Logo />

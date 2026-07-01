@@ -25,7 +25,11 @@ export default defineConfig({
         // The SVG mark from src/components/Logo.tsx — a real multi-resolution
         // PNG icon set (192/512, maskable) is a design task, not a code one;
         // this at least makes the manifest valid instead of iconless.
-        icons: [{ src: '/favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }],
+        // SVG icon works for Chrome/Android PWA; iOS home-screen icons need a
+        // PNG (generate a 180x180 PNG from favicon.svg for full iOS support).
+        icons: [
+          { src: '/favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any maskable' },
+        ],
       },
     }),
   ],

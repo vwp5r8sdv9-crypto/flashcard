@@ -126,7 +126,7 @@ export function DeckWorkspacePage() {
 
       {activeTab === 'cards' && (
         <div className="flex-1 overflow-y-auto px-4 pb-8">
-          {deck && <CardList deckId={deck.id} language={deck.language} />}
+          {deck && <CardList deckId={deck.id} language={deck.language} deckName={deck.name} />}
         </div>
       )}
 

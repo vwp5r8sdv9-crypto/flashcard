@@ -1,4 +1,3 @@
-import type { CSSProperties } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Pencil, Trash2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -41,8 +40,7 @@ export function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
       onKeyDown={(event) => {
         if (event.key === 'Enter') openStudy()
       }}
-      style={{ '--deck-color': deck.color } as CSSProperties}
-      className="cursor-pointer border-[color-mix(in_srgb,var(--deck-color)_22%,var(--border))] bg-[color-mix(in_srgb,var(--deck-color)_8%,var(--card))] shadow-[0_10px_26px_color-mix(in_srgb,var(--deck-color)_12%,var(--shadow))] transition-shadow hover:shadow-[0_10px_30px_color-mix(in_srgb,var(--deck-color)_18%,var(--shadow))]"
+      className="cursor-pointer transition-shadow hover:shadow-md"
     >
       <div className="flex items-start justify-between">
         <span
